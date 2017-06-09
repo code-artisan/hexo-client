@@ -1,0 +1,43 @@
+.sidebar {
+  width: 220px;
+  border-radius: 0;
+  background-color: #324157;
+  position: relative;
+
+  a {
+    color: #bfcbd9;
+  }
+
+  .el-menu {
+    border-radius: 0;
+  }
+
+  .is-active {
+    background-color: #48576a;
+  }
+
+  .el-menu-item {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .create-article-button {
+    color: #bfcbd9;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 14px;
+  }
+
+  .sidebar-search .el-input__inner {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    color: #bfcbd9;
+    height: 50px;
+    border-bottom: 1px #48576a solid;
+  }
+}

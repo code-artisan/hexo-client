@@ -1,0 +1,18 @@
+.setting-container {
+  .el-tabs__nav {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    float: initial;
+
+    > .el-tabs__item {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+    }
+  }
+
+  .el-tabs__content {
+    padding: 35px 70px;
+  }
+}
