@@ -1,6 +1,8 @@
 import url from 'url';
 import path from 'path';
 import { app, shell, BrowserWindow } from 'electron';
+import { ASSETS_PATH } from './global.es6';
+import setting from '../../lib/setting.es6';
 
 const name = app.getName();
 
@@ -17,29 +19,8 @@ module.exports = [
       }, {
         role: 'services',
         label: '偏好设置',
-        click() {
-          let file = url.format({
-                pathname: path.join(__dirname, 'assets', 'index.html'),
-                protocol: 'file:',
-                slashes: true,
-                hash: '/setting'
-              });
-
-          let window = new BrowserWindow({
-            width: 600,
-            height: 400,
-            title: '偏好设置',
-            // resizable: false,
-            darkTheme: true,
-            minimizable: false,
-            maximizable: false
-          });
-
-          window.loadURL( file );
-          window.setMenu( null );
-
-          window.webContents.openDevTools();
-        }
+        accelerator: 'CmdOrCtrl+,',
+        click: setting
       }, {
         type: 'separator'
       }, {

@@ -19,7 +19,7 @@ module.exports = merge({}, config, {
         })
       },
       {
-        test: /\.(woff|woff2|svg|eot|ttf|png|jpg|jpeg)(\?t=[0-9]+)?$/,
+        test: /\.(woff|woff2|svg|eot|ttf|png|gif|jpg|jpeg)(.*?)?$/,
         loader: 'file-loader',
         query: {
           context: path.join(process.cwd()),
@@ -30,7 +30,20 @@ module.exports = merge({}, config, {
     ]
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery",
+      "root.jQuery":'jquery',
+      'window.marked': 'marked',
+      'window.CodeMirror': 'CodeMirror'
+    }),
     new ExtractTextPlugin('style.css')
   ],
-  target: 'electron-renderer'
+  target: 'electron-renderer',
+  resolve: {
+    alias: {
+      editormd: path.join(__dirname, '..', 'node_modules', 'editor.md')
+    }
+  }
 });

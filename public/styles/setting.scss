@@ -1,18 +1,45 @@
 .setting-container {
-  .el-tabs__nav {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    float: initial;
+  padding: 0 60px 26px;
+  background-color: #ececec;
 
-    > .el-tabs__item {
-      display: flex;
-      flex: 1;
-      justify-content: center;
+  .form-btn {
+    padding: 4px 30px;
+
+    &:active {
+      color: #fff;
+    }
+
+    & ~ .form-btn {
+      margin-left: 10px;
     }
   }
 
-  .el-tabs__content {
-    padding: 35px 70px;
+  .fixed-bottom {
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+  }
+
+  .el-checkbox {
+    margin-top: 8px;
+  }
+
+  .el-form-item {
+    margin-bottom: 15px;
+  }
+
+  .el-input__inner {
+    &:focus,
+    &:hover {
+      border-color: #bfcbd9;
+    }
+  }
+
+  .el-form-item__label {
+    padding: 8px 12px 8px 0;
+  }
+
+  .el-form-item__content {
+    line-height: 1;
   }
 }

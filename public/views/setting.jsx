@@ -1,49 +1,77 @@
+import $ from 'jquery';
 import React from 'react';
 import { Form, Input, Button, Tabs } from 'element-react';
+
+import execute from '../utilities/socket.es6';
 
 class Setting extends React.Component {
   constructor(props) {
     super( props );
 
     this.state = {
-      activeName: "software"
+      url: '',
+      prefix: ''
     };
+
+    execute({
+      $type: 'setting.get',
+      field: ['prefix', 'url']
+    })
+    .then(({result}) => {
+      this.setState(result);
+    });
   }
 
-  handleChangeDir() {
-    console.log('clicked...');
+  handleChangeDir(prefix) {
+    execute({
+      $type: 'window.dialog',
+      title: '设置博客路径',
+      properties: ['openDirectory']
+    })
+    .then(({result: prefix}) => {
+      this.setState({ prefix });
+    });
   }
 
-  handleSwitchTab({props}) {
-    this.setState({
-      activeName: props.name
+  handleSetBlogURL(url) {
+    this.setState({ url });
+  }
+
+  handleSaveSetting() {
+    execute({
+      $type: 'setting.set',
+      setting: this.state
+    }).then(({code}) => {
+      if (code === 200) {
+        window.close();
+      }
     });
   }
 
   render() {
     return (
-      <div className="flex-col-1 setting-container">
-        <Tabs
-          className="flex-col-1"
-          activeName={ this.state.activeName }
-          onTabClick={ this.handleSwitchTab.bind(this) }
-        >
-          <Tabs.Pane label="软件" name="software">
-            <Form labelPosition="right" labelWidth="86">
-              <Form.Item label="博客路径：">
-                <Input placeholder="请设置博客路径" readOnly append={ <Button onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
-              </Form.Item>
+      <div className="flex-col-1 setting-container flex-items-center">
+        <Form labelPosition="right" labelWidth="86">
+          <Form.Item label="博客路径：">
+            <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } readOnly append={ <Button onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
+          </Form.Item>
+          <Form.Item label="博客地址：">
+            <Input placeholder="请设置博客地址" size="small" value={ this.state.url } onChange={ this.handleSetBlogURL.bind(this) } />
+          </Form.Item>
+          {
+            /*
               <Form.Item label="软件更新：">
-                <label>
-                  <input type="checkbox" /> 自动检查更新
-                </label>
+                <label className="el-checkbox"><input type="checkbox" /> 自动检查更新</label>
               </Form.Item>
-            </Form>
-          </Tabs.Pane>
-          <Tabs.Pane label="博客" name="blog">
-
-          </Tabs.Pane>
-        </Tabs>
+             */
+          }
+          <Form.Item className="fixed-bottom">
+            <div className="pull-right">
+              <input className="form-btn" type="reset" value="重置" />
+              <input className="form-btn" type="submit" value="应用" onClick={ this.handleSaveSetting.bind(this) } />
+            </div>
+          </Form.Item>
+        </Form>
       </div>
     );
   }

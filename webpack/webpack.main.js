@@ -4,7 +4,7 @@ var webpack = require('webpack'),
 
 module.exports = merge({}, config, {
   entry: {
-    'index': './app/index.es6'
+    'index': './app.es6'
   },
   node: {
     __dirname: false,

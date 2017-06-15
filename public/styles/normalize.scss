@@ -8,3 +8,19 @@ body {
 a {
   text-decoration: none;
 }
+
+[type="checkbox"],
+[type="radio"] {
+  vertical-align: middle;
+  margin-top: -2px;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: initial;
+  font-size: 12px;
+  padding: 4px;
+}

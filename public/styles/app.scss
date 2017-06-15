@@ -1,9 +1,13 @@
-@import 'normalize.scss';
 @import '~normalize.css';
+@import 'normalize.scss';
 
 @import 'flex.scss';
 @import 'sidebar.scss';
 @import 'element.scss';
 
+@import 'iconfont.scss';
 @import 'utilities.scss';
+
+@import 'install.scss';
 @import 'setting.scss';
+@import 'editormd.scss';

@@ -24,7 +24,6 @@ function registry(target) {
 
 function execute(key, target) {
   ipcMain.on(key, function ({sender}, args, uuid) {
-
     function callback(result) {
       if (_.isFunction(sender.send)) {
         return sender.send(`${key}-${uuid}`, result);

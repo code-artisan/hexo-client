@@ -2,3 +2,4 @@ renderer.js
 index.js
 npm-debug.log
 node_modules
+hexo-client*

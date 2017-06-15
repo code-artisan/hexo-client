@@ -1,10 +1,10 @@
 import fs from 'fs';
 import _ from 'underscore';
-import { BrowserWindow } from 'electron';
-import response from '../response.es6';
+import { BrowserWindow, dialog } from 'electron';
+import response from '../../lib/response.es6';
 
 module.exports = {
-  window(done, {title}) {
+  $window(done, {title}) {
     let window = new BrowserWindow({
           width: 600,
           height: 400,
@@ -14,8 +14,12 @@ module.exports = {
           maximizable: false
         });
 
-    window.loadUrl('https://www.baidu.com');
-
     return done(response(200));
+  },
+
+  '$window.dialog': function (done, options) {
+    dialog.showOpenDialog(options, function (filepath = []) {
+      return done(response(filepath.pop(), 200));
+    });
   }
 };

@@ -1,0 +1,20 @@
+//
+// Display utilities
+//
+
+.d-block {
+  display: block !important;
+}
+
+.d-inline-block {
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+.d-inline {
+  display: inline !important;
+}
+
+.d-hide {
+  display: none;
+}
