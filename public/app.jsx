@@ -14,15 +14,15 @@ class App extends React.Component {
     this.state = {
       loading: true,
       message: '',
-      preview: {
-        started: false,
-        loading: false
-      },
       keywords: '',
       articles: []
     };
 
+    this._url = null;
+
     this.fetch();
+
+    this.getBlogURL();
 
     $(window).on('refresh', this.fetch.bind(this));
   }
@@ -55,6 +55,16 @@ class App extends React.Component {
     setTimeout(this.fetch.bind(this), 200);
   }
 
+  getBlogURL() {
+    execute({
+      $type: 'setting.get',
+      field: 'url'
+    })
+    .then(({result}) => {
+      this._url = result;
+    });
+  }
+
   handlePublishBlog() {
     this.setState({
       loading: true,
@@ -77,46 +87,6 @@ class App extends React.Component {
     });
   }
 
-  handlePreviewBlog() {
-    let { preview } = this.state;
-
-    this.setState({
-      preview: {
-        ...preview,
-        loading: true
-      },
-      message: '正在启动...'
-    });
-
-    execute({
-      $type: 'blog.start'
-    })
-    .then(({code}) => {
-      if (code === 200) {
-        preview.started = true;
-        shell.openExternal('http://localhost:4000', 'blog');
-      } else {
-        preview.started = false;
-      }
-
-      preview.loading = false;
-
-      this.setState({
-        message: '',
-        preview
-      });
-    }, function (e) {
-      console.log(e);
-      this.setState({
-        message: '启动失败',
-        preview: {
-          started: false,
-          loading: false
-        }
-      });
-    });
-  }
-
   handleOpenSettingWindow() {
     execute({
       $type: 'setting.open'
@@ -127,39 +97,17 @@ class App extends React.Component {
     this.setState({ keywords });
   }
 
-  handleKillServer() {
-    execute({
-      $type: 'blog.stop'
-    })
-    .then(({code}) => {
-      if (code === 200) {
-        this.setState({
-          preview: false
-        });
-      }
-    })
+  handlePreviewBlog() {
+    shell.openExternal(this._url);
   }
 
-  renderPreviewIcon() {
-    if (this.state.preview.started) {
-      return (
-        <a href="javascript:;" className="tool-item" onClick={ this.handleKillServer.bind(this) } title="停止预览">
-          <i className="icon icon-hide" />
-        </a>
-      );
-    } else {
-      if (this.state.preview.loading) {
-        return (
-          <a href="javascript:;" className="tool-item" title="预览中"><Icon name="loading" /></a>
-        );
-      }
+  handleRemoveArticle(filename, event) {
+    event.stopPropagation();
 
-      return (
-        <a href="javascript:;" className="tool-item" onClick={ this.handlePreviewBlog.bind(this) } title="预览">
-          <i className="icon icon-preview" />
-        </a>
-      );
-    }
+    execute({
+      $type: 'article.remove',
+      filename
+    });
   }
 
   render() {
@@ -173,7 +121,9 @@ class App extends React.Component {
       <Loading className="flex-row-1" loading={ this.state.loading } fullscreen text={ this.state.message }>
         <div className="flex-col sidebar">
           <Input
-            icon="search"
+            icon={
+              <i className="el-input__icon icon icon-search" />
+            }
             value={ this.state.keywords }
             className="sidebar-search"
             placeholder="请输入关键词搜索文章"
@@ -181,7 +131,7 @@ class App extends React.Component {
           />
           <Menu theme="dark" className="scroll-y">
             {
-              result.map(function ({title}, index) {
+              result.map(({title}, index) => {
                 return (
                   <li key={ index }>
                     <Link
@@ -189,7 +139,8 @@ class App extends React.Component {
                       activeClassName="is-active"
                       to={`/article/${ title }`}
                     >
-                      <i className="el-icon-message"></i> { title }
+                      <i className="icon icon-article"></i> { title }
+                      <i className="icon icon-trash" onClick={ this.handleRemoveArticle.bind(this, title) } />
                     </Link>
                   </li>
                 );
@@ -198,11 +149,12 @@ class App extends React.Component {
           </Menu>
           <div className="sidebar-tools">
             {
-              this.renderPreviewIcon()
+              this._url ? (
+                <a href="javascript:;" className="tool-item" onClick={ this.handlePreviewBlog.bind(this) } title="打开博客">
+                  <i className="icon icon-preview" />
+                </a>
+              ) : null
             }
-            <a href="javascript:;" className="tool-item" onClick={ this.handlePublishBlog.bind(this) } title="同步">
-              <i className="icon icon-upload" />
-            </a>
             <a href="javascript:;" className="tool-item" onClick={ this.handleOpenSettingWindow.bind(this) } title="偏好设置">
               <i className="icon icon-setting" />
             </a>

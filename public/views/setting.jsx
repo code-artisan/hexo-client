@@ -29,7 +29,9 @@ class Setting extends React.Component {
       properties: ['openDirectory']
     })
     .then(({result: prefix}) => {
-      this.setState({ prefix });
+      if (prefix.length !== 0) {
+        this.setState({ prefix });
+      }
     });
   }
 

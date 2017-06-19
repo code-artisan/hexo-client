@@ -5,10 +5,10 @@ import execute from '../utilities/socket.es6';
 
 const rules = {
   prefix: [
-    { required: true, message: '请设置博客路径', trigger: 'blur' }
+    { required: true, message: '请设置博客路径', trigger: 'change' }
   ],
   url: [
-    { required: true, message: '请设置博客地址', trigger: 'blur' }
+    { required: true, message: '请设置博客地址', trigger: 'change' }
   ]
 };
 
@@ -42,7 +42,9 @@ class InstallView extends React.Component {
       properties: ['openDirectory']
     })
     .then(({result: prefix}) => {
-      this.setState({ prefix });
+      if (prefix.length !== 0) {
+        this.setState({ prefix });
+      }
     });
   }
 
@@ -72,13 +74,15 @@ class InstallView extends React.Component {
       }).then(({code}) => {
         if ( isNewForm ) {
           return execute({
-            $type: 'blog.copy'
+            $type: 'blog.init'
           });
         }
 
         this.redirect2index(code);
-      }).then(({code}) => {
-        this.redirect2index(code);
+      }).then((res) => {
+        if ( _.has(res, 'code') ) {
+          this.redirect2index(code);
+        }
       });
     });
   }
@@ -93,35 +97,19 @@ class InstallView extends React.Component {
     return (
       <div className="flex-col-1 flex-items-center install-container">
         <div className="flex-center">
-          <Tabs onTabClick={ this.handleSwitchTab.bind(this) }>
-            <Tabs.Pane label="已有博客" name="1">
-              <Form ref="form-exists" model={ this.state } labelPosition="right" labelWidth="92" rules={ rules }>
-                <Form.Item prop="prefix" label="博客路径：">
-                  <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } readOnly append={ <Button onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
-                </Form.Item>
+          <Form ref="form-exists" model={ this.state } labelPosition="right" labelWidth="92" rules={ rules }>
+            <Form.Item prop="prefix" label="博客路径：">
+              <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } append={ <Button onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
+            </Form.Item>
 
-                <Form.Item prop="url" label="博客地址：">
-                  <Input placeholder="请设置博客地址" size="small" value={ this.state.url } onChange={ this.handleSetBlogURL.bind(this) } />
-                </Form.Item>
+            <Form.Item prop="url" label="博客地址：">
+              <Input placeholder="请设置博客地址" size="small" value={ this.state.url } onChange={ this.handleSetBlogURL.bind(this) } />
+            </Form.Item>
 
-                <Form.Item labelWidth="0">
-                  <Button type="primary" size="small" nativeType="submit" onClick={ this.handleSaveSetting.bind(this, 'form-exists') }>开始写作</Button>
-                </Form.Item>
-              </Form>
-            </Tabs.Pane>
-
-            <Tabs.Pane label="新建博客" name="2">
-              <Form ref="form-new" model={ this.state } labelPosition="right" labelWidth="92" rules={ rules }>
-                <Form.Item prop="prefix" label="博客路径：">
-                  <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } readOnly append={ <Button onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
-                </Form.Item>
-
-                <Form.Item labelWidth="0">
-                  <Button type="primary" size="small" nativeType="submit" onClick={ this.handleSaveSetting.bind(this, 'form-new') } loading={ this.state.pending }>开始写作</Button>
-                </Form.Item>
-              </Form>
-            </Tabs.Pane>
-          </Tabs>
+            <Form.Item labelWidth="0">
+              <Button type="primary" size="small" nativeType="submit" onClick={ this.handleSaveSetting.bind(this, 'form-exists') }>开始写作</Button>
+            </Form.Item>
+          </Form>
         </div>
       </div>
     );

@@ -2,6 +2,8 @@ import url from 'url';
 import path from 'path';
 import glob from 'glob';
 import { app, BrowserWindow, Menu } from 'electron';
+import { autoUpdater } from 'electron-updater';
+
 import { ASSETS_PATH } from './app/config/global.es6';
 import registry from './lib/socket.es6';
 import template from './app/config/menu.es6';
@@ -13,6 +15,10 @@ import ArticleController from './app/controllers/ArticleController.es6';
 import SettingController from './app/controllers/SettingController.es6';
 
 let mainWindow = null;
+
+function sendStatusToWindow(message) {
+  mainWindow.webContents.send('message', message);
+}
 
 function createWindow() {
   // Create the browser window.
@@ -40,7 +46,6 @@ function createWindow() {
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
   }
-    mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -68,6 +73,8 @@ app.on('ready', function () {
   registry(SettingController);
 
   createWindow();
+
+  autoUpdater.checkForUpdates();
 });
 
 app.on('activate', function () {
@@ -82,3 +89,30 @@ app.on('window-all-closed', function () {
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') app.quit();
 });
+
+autoUpdater
+  .on('updater-downloaded', function () {
+    autoUpdater.quitAndInstall();
+  })
+  .on('checking-for-update', () => {
+    sendStatusToWindow('正在检查更新...');
+  })
+  .on('update-available', (ev, info) => {
+    sendStatusToWindow('Update available.');
+  })
+  .on('update-not-available', (ev, info) => {
+    sendStatusToWindow('已经是最新版本.');
+  })
+  .on('error', (ev, err) => {
+    sendStatusToWindow('更新失败.');
+  })
+  .on('download-progress', (progressObj) => {
+    let log_message = "正在下载: " + progressObj.bytesPerSecond;
+    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+
+    sendStatusToWindow(log_message);
+  })
+  .on('update-downloaded', (ev, info) => {
+    sendStatusToWindow('下载完成，正在更新并重启...');
+  });

@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs-jetpack';
 import path from 'path';
 import glob from 'glob';
 import _ from 'underscore';
@@ -49,19 +49,20 @@ module.exports = {
 
     let filepath = getFullpath(filename);
 
-    if ( fs.existsSync(filepath) === false ) {
-      return done(response(404, '该文章不存在'));
+    if ( fs.exists(filepath) !== 'file' ) {
+      return done(response(404, '文章不存在'));
     }
 
-    fs.readFile(filepath, 'utf8', function (error, data) {
-      if (error) new Erorr(error);
+    fs
+      .readAsync(filepath, 'utf8')
+      .then(function (data) {
+        let article = formatter(data);
 
-      try {
-        done(response(formatter(data)));
-      } catch (error) {
-        done(response(500, '文章读取失败'));
-      }
-    });
+        return done(response(article));
+      })
+      .catch(function (e) {
+        return done(response(500, '文章读取失败'));
+      });
   },
 
   /**
@@ -71,28 +72,26 @@ module.exports = {
    * @param  {Object}   article
    * @return {Object}
    */
-  '$article.save': function (done, {article}) {
-    const filename = article.title.trim();
-
+  '$article.save': function (done, {article, filename}) {
     if ( ! _.isString(filename) ) {
       return done(response(400, '文件路径不能为空'));
     }
 
-    let filepath = getFullpath(filename);
-
-    let content = `---
+    let filepath = getFullpath(filename),
+        content  = `---
 title: ${ (article.title || '').trim() }
 date: ${ (article.date || '').trim() }
 tags: [${ (article.tags || '').trim() }]
 ---\n\r${ (article.body || '').trim() }`;
 
-    fs.writeFile(filepath, content, 'utf8', function (error, data) {
-      if (error) {
-        console.log(error);
-      } else {
-        return done(response(200));
-      }
-    });
+    fs
+      .writeAsync(filepath, content)
+      .then(function () {
+        return done(response());
+      })
+      .catch(function () {
+        return done(response(500, '保存失败'));
+      });
   },
 
   /**
@@ -102,7 +101,7 @@ tags: [${ (article.tags || '').trim() }]
    */
   '$article.list': function (done) {
     try {
-      const prefix = path.join(getPrefix(), 'source', '_posts');
+      let prefix = path.join(getPrefix(), 'source', '_posts');
 
       glob(`${ prefix }/**.md`, function (error, data) {
         let articles = _.map(data, function (item) {
@@ -127,7 +126,7 @@ tags: [${ (article.tags || '').trim() }]
   '$article.remove': function (done, {filename}) {
     let filepath = getFullpath(filename);
 
-    fs.unlink(filepath, function (err, data) {
+    fs.removeAsync(filepath, function () {
       return done(response(204, '删除成功'));
     });
   }

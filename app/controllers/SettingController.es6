@@ -36,7 +36,7 @@ module.exports = {
 
       return done(response(200));
     } catch (e) {
-      console.log(e);
+      return done(response(500));
     }
   },
 

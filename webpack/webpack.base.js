@@ -4,9 +4,18 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.(js|jsx|es6)$/,
+        test: /\.(jsx|es6)$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.js$/,
+        include: /node_modules\/(JSONStream|npm|rc)/,
+        loader: 'shebang-loader'
+      },
+      {
+        test: /\.(html|cs)$/,
+        loader: 'ignore-loader'
       }
     ]
   },

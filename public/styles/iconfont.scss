@@ -9,7 +9,7 @@
 .icon,
 .iconfont {
   font-family:"iconfont" !important;
-  font-size:18px;
+  font-size:14px;
   font-weight: 400;
   font-style:normal;
   -webkit-font-smoothing: antialiased;
@@ -18,9 +18,13 @@
 
 .icon-setting:before { content: "\e617"; }
 
+.icon-search:before { content: "\e606"; }
+
 .icon-upload:before { content: "\e6a4"; }
 
 .icon-refresh:before { content: "\e63a"; }
+
+.icon-trash:before { content: "\e652"; }
 
 .icon-plus:before { content: "\e666"; }
 
@@ -28,3 +32,4 @@
 
 .icon-hide:before { content: "\e76b"; }
 
+.icon-article:before { content: "\e614"; }

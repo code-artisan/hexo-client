@@ -1,21 +1,3 @@
 .el-form-item.is-error .el-input-group__append {
   border-color: #ff4949;
 }
-
-.article-editor {
-  padding: 20px;
-
-  .el-textarea {
-    margin: 15px 0;
-  }
-
-  .el-input + .el-input {
-    margin-top: 15px;
-  }
-
-  .el-textarea__inner {
-    display: flex;
-    flex: 1 0 0%;
-  }
-}
-

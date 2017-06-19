@@ -4,7 +4,7 @@ import _ from 'underscore';
 import { Input, Button, Loading } from 'element-react';
 
 import execute from '../utilities/socket.es6';
-import ArticleEditor from '../components/article-editor.jsx';
+import ArticleEditor from '../components/article-editor/index.jsx';
 
 const article = {
   body: ''
@@ -17,7 +17,7 @@ class ArticleView extends React.Component {
     this.state = {
       article,
       loading: false,
-      pending: false
+      message: ''
     };
   }
 
@@ -61,16 +61,19 @@ class ArticleView extends React.Component {
         };
 
     this.setState({
-      pending: true
+      loading: true,
+      message: '正在保存...'
     });
 
     execute({
       $type: 'article.save',
-      article
+      article,
+      filename: this.props.params.filename || article.title
     })
     .then(({code}) => {
       this.setState({
-        pending: false
+        loading: false,
+        message: code === 200 ? '保存成功' : '保存失败'
       });
 
       if ( code === 200) {
@@ -81,9 +84,9 @@ class ArticleView extends React.Component {
         });
       }
     }, (e) => {
-      console.log(e);
       this.setState({
-        pending: false
+        loading: false,
+        message: '保存失败'
       });
     });
   }
@@ -95,7 +98,7 @@ class ArticleView extends React.Component {
   render() {
     return (
       <div className="flex-col-1 article-editor">
-        <Loading loading={ this.state.loading } className="flex-col-1">
+        <Loading loading={ this.state.loading } className="flex-col-1" text={ this.state.message }>
           <ArticleEditor ref="$edtior" article={ this.state.article } />
 
           <div className="flex-row m-t-15">

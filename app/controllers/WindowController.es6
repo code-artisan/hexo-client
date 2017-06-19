@@ -19,7 +19,7 @@ module.exports = {
 
   '$window.dialog': function (done, options) {
     dialog.showOpenDialog(options, function (filepath = []) {
-      return done(response(filepath.pop(), 200));
+      return done(response(filepath.pop() || '', 200));
     });
   }
 };
