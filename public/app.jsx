@@ -107,6 +107,15 @@ class App extends React.Component {
     execute({
       $type: 'article.remove',
       filename
+    })
+    .then((res) => {
+      if (res.code === 200) {
+        this.refresh();
+
+        this.props.router.replace({
+          pathname: '/'
+        });
+      }
     });
   }
 
