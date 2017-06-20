@@ -16,27 +16,7 @@ import WindowController from './app/controllers/WindowController.es6';
 import ArticleController from './app/controllers/ArticleController.es6';
 import SettingController from './app/controllers/SettingController.es6';
 
-let mainWindow = null,
-    pathname = '',
-    contextMenu = new Menu;
-
-contextMenu.append(new MenuItem({
-  label: '编辑',
-  click: function (item, win) {
-    win.send('edit-article', pathname);
-  }
-}));
-
-contextMenu.append(new MenuItem({
-  type: 'separator'
-}));
-
-contextMenu.append(new MenuItem({
-  label: '删除',
-  click: function (item, win) {
-    win.send('remove-article', pathname);
-  }
-}));
+let mainWindow = null;
 
 function sendStatusToWindow(message) {
   mainWindow.webContents.send('message', message);
@@ -108,13 +88,6 @@ app.on('window-all-closed', function () {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') app.quit();
-});
-
-ipc.on('show-sidebar-context-menu', function ({sender}, hash) {
-  const win = BrowserWindow.fromWebContents(sender);
-
-  pathname = hash.trim();
-  contextMenu.popup(win);
 });
 
 ipc.on('show-editor-context-menu', function ({sender}) {

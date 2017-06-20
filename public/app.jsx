@@ -3,12 +3,21 @@ import _ from 'underscore';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
-import { ipcRenderer as ipc } from 'electron';
-import { Button, Input, Menu, Icon, Loading } from 'element-react';
+import { ipcRenderer as ipc, remote } from 'electron';
+import { Button, Input, Menu as Sidebar, Icon, Loading } from 'element-react';
 import { shell } from 'electron';
 import execute from './utilities/socket.es6';
 
+const {
+  Menu,
+  MenuItem
+} = remote;
+
+const menu = new Menu();
+
 class App extends React.Component {
+  pathname = '';
+
   constructor(props) {
     super( props );
 
@@ -118,24 +127,42 @@ class App extends React.Component {
     });
   }
 
+  registryContextMenu() {
+    menu.append(new MenuItem({
+      label: '编辑',
+      click: () => {
+        console.log(this.pathname);
+        this.props.router.replace({
+          pathname: this.pathname
+        });
+      }
+    }));
+
+    menu.append(new MenuItem({
+      type: 'separator'
+    }));
+
+    menu.append(new MenuItem({
+      label: '删除',
+      click: () => {
+        let pathname = this.pathname.split('/').pop();
+
+        this.handleRemoveArticle( pathname );
+      }
+    }));
+  }
+
   componentDidMount() {
-    let menu = ReactDOM.findDOMNode(this.refs.menu);
+    this.registryContextMenu();
 
-    $(menu)
-      .on('contextmenu', function ({target}) {
-        let hash = target.hash.substr( 1 );
-        ipc.send('show-sidebar-context-menu', hash);
-      })
-      .on('selectstart dragstart', () => false);
+    let node = ReactDOM.findDOMNode(this.refs.menu);
 
-    ipc.on('edit-article', (e, pathname) => {
-      this.props.router.replace({ pathname });
-    });
+    $(node).on('contextmenu', (event) => {
+      event.preventDefault();
 
-    ipc.on('remove-article', (e, title) => {
-      title = title.split('/').pop();
+      this.pathname = event.target.hash.trim().substr(1);
 
-      this.handleRemoveArticle(title);
+      menu.popup(remote.getCurrentWindow());
     });
   }
 
@@ -158,7 +185,7 @@ class App extends React.Component {
             placeholder="请输入关键词搜索文章"
             onChange={ this.handleChangeKeywords.bind(this) }
           />
-          <Menu theme="dark" className="scroll-y" ref="menu">
+          <Sidebar theme="dark" className="scroll-y" ref="menu">
             {
               result.map(({title}, index) => {
                 return (
@@ -174,7 +201,7 @@ class App extends React.Component {
                 );
               })
             }
-          </Menu>
+          </Sidebar>
           <div className="sidebar-tools">
             {
               this._url ? (

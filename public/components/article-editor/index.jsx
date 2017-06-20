@@ -52,7 +52,7 @@ class ArticleEditor extends React.Component {
           }
         },
         onload: function () {
-          $('.CodeMirror-code').on('contextmenu', function () {
+          $('.CodeMirror-scroll').on('contextmenu', function () {
             return ipc.send('show-editor-context-menu');
           });
         },
