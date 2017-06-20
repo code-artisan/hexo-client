@@ -1,0 +1,24 @@
+.install-container {
+  .el-tabs {
+    width: 400px;
+    height: 202px;
+  }
+
+  .el-form-item {
+    &:last-of-type {
+      .el-button {
+        width: 100%;
+        display: block;
+      }
+    }
+  }
+
+  .el-tabs__nav {
+    width: 100%;
+  }
+
+  .el-tabs__item {
+    width: 50%;
+    text-align: center;
+  }
+}

@@ -1,17 +1,23 @@
+import $ from 'jquery';
 import React from 'react';
 import _ from 'underscore';
 import { Input, Button, Loading } from 'element-react';
 
 import execute from '../utilities/socket.es6';
+import ArticleEditor from '../components/article-editor/index.jsx';
 
-import ArticleEditor from '../components/article-editor.jsx';
+const article = {
+  body: ''
+};
 
 class ArticleView extends React.Component {
   constructor(props) {
     super( props );
 
     this.state = {
-      article: {}
+      article,
+      loading: false,
+      message: ''
     };
   }
 
@@ -19,41 +25,69 @@ class ArticleView extends React.Component {
     this.handleFetchArticle(this.props.params);
   }
 
-  handleFetchArticle({filepath}) {
-    if (_.isString(filepath)) {
+  handleFetchArticle({filename}) {
+    if (_.isString(filename)) {
       this.setState({
         loading: true
       });
 
       execute({
         $type: 'article.find',
-        filepath
-      }).then(({result: article, code}) => {
+        filename
+      })
+      .then(({result: article, code}) => {
         if ( code === 200 ) {
-          this.setState({
-            article,
-            loading: false
-          });
+          this.state.article = article;
         }
-      }).catch(function (error) {
+
+        this.setState({
+          loading: false
+        });
+      })
+      .catch((error) => {
         this.setState({
           loading: false
         });
       });
+    } else {
+      this.setState({ article });
     }
   }
 
   handleSaveArticle() {
-    let { filepath } = this.props.params;
+    let article = {
+          ...this.refs.$edtior.state.article,
+          body: this.refs.$edtior.refs.body.value
+        };
+
+    this.setState({
+      loading: true,
+      message: '正在保存...'
+    });
 
     execute({
       $type: 'article.save',
-      filepath,
-      article: this.state.article
-    }).then(({result, code}) => {
-      console.log(result, code);
-    }).catch(function (error) {
-      console.log(error);
+      article,
+      filename: this.props.params.filename || article.title
+    })
+    .then(({code}) => {
+      this.setState({
+        loading: false,
+        message: code === 200 ? '保存成功' : '保存失败'
+      });
+
+      if ( code === 200) {
+        $(window).trigger('refresh');
+
+        this.props.router.replace({
+          pathname: '/'
+        });
+      }
+    }, (e) => {
+      this.setState({
+        loading: false,
+        message: '保存失败'
+      });
     });
   }
 
@@ -64,12 +98,12 @@ class ArticleView extends React.Component {
   render() {
     return (
       <div className="flex-col-1 article-editor">
-        <Loading loading={ this.state.loading } className="flex-col-1">
-          <ArticleEditor article={ this.state.article } />
+        <Loading loading={ this.state.loading } className="flex-col-1" text={ this.state.message }>
+          <ArticleEditor ref="$edtior" article={ this.state.article } />
 
           <div className="flex-row m-t-15">
-            <Button type="primary" onClick={ this.handleSaveArticle.bind(this) }>发布</Button>
-            <Button type="danger">取消</Button>
+            <Button type="primary" onClick={ this.handleSaveArticle.bind(this) }>保存</Button>
+            <a className="el-button el-button--danger" href="#/">取消</a>
           </div>
         </Loading>
       </div>
