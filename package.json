@@ -16,14 +16,7 @@
     ],
     "dmg": {
       "backgroundColor": "#161d22"
-    },
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "artisan",
-        "repo": "https://github.com/code-artisan/code-artisan.github.io"
-      }
-    ]
+    }
   },
   "scripts": {
     "start": "webpack --env development -w --config webpack/webpack.config.js",

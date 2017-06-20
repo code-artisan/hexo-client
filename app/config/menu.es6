@@ -95,13 +95,13 @@ module.exports = [
       {
         label: '仓库地址',
         click() {
-          shell.openExternal('https://github.com');
+          shell.openExternal('https://github.com/code-artisan');
         }
       },
       {
         label: '关于作者',
         click() {
-          shell.openExternal('http://www.codeartisan.name');
+          shell.openExternal('http://blog.codeartisan.name');
         }
       },
       {

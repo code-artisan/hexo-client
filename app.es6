@@ -1,7 +1,7 @@
 import url from 'url';
 import path from 'path';
 import glob from 'glob';
-import { app, BrowserWindow, Menu } from 'electron';
+import { app, BrowserWindow, Menu, MenuItem, ipcMain as ipc } from 'electron';
 import { autoUpdater } from 'electron-updater';
 
 import { ASSETS_PATH } from './app/config/global.es6';
@@ -9,12 +9,34 @@ import registry from './lib/socket.es6';
 import template from './app/config/menu.es6';
 import { getPrefix } from './lib/utilities.es6';
 
+import editorMenu from './app/config/context/editor.es6';
+
 import BlogController from './app/controllers/BlogController.es6';
 import WindowController from './app/controllers/WindowController.es6';
 import ArticleController from './app/controllers/ArticleController.es6';
 import SettingController from './app/controllers/SettingController.es6';
 
-let mainWindow = null;
+let mainWindow = null,
+    pathname = '',
+    contextMenu = new Menu;
+
+contextMenu.append(new MenuItem({
+  label: '编辑',
+  click: function (item, win) {
+    win.send('edit-article', pathname);
+  }
+}));
+
+contextMenu.append(new MenuItem({
+  type: 'separator'
+}));
+
+contextMenu.append(new MenuItem({
+  label: '删除',
+  click: function (item, win) {
+    win.send('remove-article', pathname);
+  }
+}));
 
 function sendStatusToWindow(message) {
   mainWindow.webContents.send('message', message);
@@ -73,8 +95,6 @@ app.on('ready', function () {
   registry(SettingController);
 
   createWindow();
-
-  autoUpdater.checkForUpdates();
 });
 
 app.on('activate', function () {
@@ -90,29 +110,52 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit();
 });
 
-autoUpdater
-  .on('updater-downloaded', function () {
-    autoUpdater.quitAndInstall();
-  })
-  .on('checking-for-update', () => {
-    sendStatusToWindow('正在检查更新...');
-  })
-  .on('update-available', (ev, info) => {
-    sendStatusToWindow('Update available.');
-  })
-  .on('update-not-available', (ev, info) => {
-    sendStatusToWindow('已经是最新版本.');
-  })
-  .on('error', (ev, err) => {
-    sendStatusToWindow('更新失败.');
-  })
-  .on('download-progress', (progressObj) => {
-    let log_message = "正在下载: " + progressObj.bytesPerSecond;
-    log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-    log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+ipc.on('show-sidebar-context-menu', function ({sender}, hash) {
+  const win = BrowserWindow.fromWebContents(sender);
 
-    sendStatusToWindow(log_message);
-  })
-  .on('update-downloaded', (ev, info) => {
-    sendStatusToWindow('下载完成，正在更新并重启...');
-  });
+  pathname = hash.trim();
+  contextMenu.popup(win);
+});
+
+ipc.on('show-editor-context-menu', function ({sender}) {
+  const win = BrowserWindow.fromWebContents(sender);
+
+  editorMenu.popup( win );
+});
+
+// app.on('browser-window-created', function (event, win) {
+//   win.webContents.on('context-menu', function (e, params) {
+//     if (params.linkText) {
+//       parameters = params;
+//     }
+
+//     contextMenu.popup(win, params.x, params.y);
+//   });
+// });
+
+// autoUpdater
+//   .on('updater-downloaded', function () {
+//     autoUpdater.quitAndInstall();
+//   })
+//   .on('checking-for-update', () => {
+//     sendStatusToWindow('正在检查更新...');
+//   })
+//   .on('update-available', (ev, info) => {
+//     sendStatusToWindow('Update available.');
+//   })
+//   .on('update-not-available', (ev, info) => {
+//     sendStatusToWindow('已经是最新版本.');
+//   })
+//   .on('error', (ev, err) => {
+//     sendStatusToWindow('更新失败.');
+//   })
+//   .on('download-progress', (progressObj) => {
+//     let log_message = "正在下载: " + progressObj.bytesPerSecond;
+//     log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+//     log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+
+//     sendStatusToWindow(log_message);
+//   })
+//   .on('update-downloaded', (ev, info) => {
+//     sendStatusToWindow('下载完成，正在更新并重启...');
+//   });

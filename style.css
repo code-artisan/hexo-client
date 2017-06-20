@@ -8384,16 +8384,7 @@ textarea {
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    position: relative;
-    padding-right: 30px; }
-    .sidebar .el-menu-item .icon-trash {
-      color: #ff4949;
-      display: none;
-      position: absolute;
-      right: 10px; }
-    .sidebar .el-menu-item:hover .icon-trash {
-      display: inline-block; }
+    white-space: nowrap; }
   .sidebar .sidebar-tools {
     color: #bfcbd9;
     position: absolute;

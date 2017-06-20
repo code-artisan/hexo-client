@@ -45,6 +45,6 @@
     <key>NSHumanReadableCopyright</key>
     <string>Copyright © 2017 Artisan.</string>
     <key>AsarIntegrity</key>
-    <string>{"checksums":{"app.asar":"gF3vnB+bo9ZzQ6wEbUshVlOjO3Twk6ZS196ffZ4LyvU2PgKVT2HzC+RNXgXpvWIL/Hz+rnhAQ6qOsa+qs12fuA==","electron.asar":"E0VzOFDGl10vUSrbYHZmEmLZx1jQKCUPWF+JLngj8lbgihQCML3iAz2ITqK1UhrYEV5lm/xLrs7h8RgAD0pgpw=="}}</string>
+    <string>{"checksums":{"app.asar":"OqKAiVehwgys82jT7yDRZFLSm6XhYPpbGHRyDI3EaE4EGgfYhkfuROM/kAw8sION0PnLdcybNyTvX8+ejZlIjw==","electron.asar":"E0VzOFDGl10vUSrbYHZmEmLZx1jQKCUPWF+JLngj8lbgihQCML3iAz2ITqK1UhrYEV5lm/xLrs7h8RgAD0pgpw=="}}</string>
   </dict>
 </plist>

@@ -126,8 +126,13 @@ tags: [${ (article.tags || '').trim() }]
   '$article.remove': function (done, {filename}) {
     let filepath = getFullpath(filename);
 
-    fs.removeAsync(filepath, function () {
-      return done(response(204, '删除成功'));
-    });
+    fs
+      .removeAsync(filepath)
+      .then(function () {
+        return done(response(204, '删除成功'));
+      })
+      .catch(function (e) {
+        return done(response(500, '删除失败'));
+      });
   }
 };

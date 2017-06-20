@@ -3,6 +3,7 @@ import _ from 'underscore';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
+import { ipcRenderer as ipc } from 'electron';
 import { Button, Input, Menu, Icon, Loading } from 'element-react';
 import { shell } from 'electron';
 import execute from './utilities/socket.es6';
@@ -101,21 +102,40 @@ class App extends React.Component {
     shell.openExternal(this._url);
   }
 
-  handleRemoveArticle(filename, event) {
-    event.stopPropagation();
-
+  handleRemoveArticle(filename) {
     execute({
       $type: 'article.remove',
       filename
     })
     .then((res) => {
-      if (res.code === 200) {
+      if (res.code === 204) {
         this.refresh();
 
         this.props.router.replace({
           pathname: '/'
         });
       }
+    });
+  }
+
+  componentDidMount() {
+    let menu = ReactDOM.findDOMNode(this.refs.menu);
+
+    $(menu)
+      .on('contextmenu', function ({target}) {
+        let hash = target.hash.substr( 1 );
+        ipc.send('show-sidebar-context-menu', hash);
+      })
+      .on('selectstart dragstart', () => false);
+
+    ipc.on('edit-article', (e, pathname) => {
+      this.props.router.replace({ pathname });
+    });
+
+    ipc.on('remove-article', (e, title) => {
+      title = title.split('/').pop();
+
+      this.handleRemoveArticle(title);
     });
   }
 
@@ -138,7 +158,7 @@ class App extends React.Component {
             placeholder="请输入关键词搜索文章"
             onChange={ this.handleChangeKeywords.bind(this) }
           />
-          <Menu theme="dark" className="scroll-y">
+          <Menu theme="dark" className="scroll-y" ref="menu">
             {
               result.map(({title}, index) => {
                 return (
@@ -149,7 +169,6 @@ class App extends React.Component {
                       to={`/article/${ title }`}
                     >
                       <i className="icon icon-article"></i> { title }
-                      <i className="icon icon-trash" onClick={ this.handleRemoveArticle.bind(this, title) } />
                     </Link>
                   </li>
                 );

@@ -24,19 +24,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    position: relative;
-    padding-right: 30px;
-
-    .icon-trash {
-      color: #ff4949;
-      display: none;
-      position: absolute;
-      right: 10px;
-    }
-
-    &:hover .icon-trash {
-      display: inline-block;
-    }
   }
 
   .sidebar-tools {
