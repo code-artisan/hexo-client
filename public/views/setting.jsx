@@ -69,7 +69,7 @@ class Setting extends React.Component {
           }
           <Form.Item className="fixed-bottom">
             <div className="pull-right">
-              <input className="form-btn" type="reset" value="重置" />
+              <button className="form-btn" onClick={ () => window.close() }>取消</button>
               <input className="form-btn" type="submit" value="应用" onClick={ this.handleSaveSetting.bind(this) } />
             </div>
           </Form.Item>

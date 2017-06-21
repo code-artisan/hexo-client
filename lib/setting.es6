@@ -26,7 +26,7 @@ module.exports = function () {
   window.loadURL( file );
   window.setMenu( null );
 
-  if ( ! isDevelopment ) {
+  if ( isDevelopment ) {
     window.webContents.openDevTools();
   }
 };
