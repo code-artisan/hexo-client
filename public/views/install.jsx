@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import _ from 'underscore';
 import React from 'react'
 import { Button, Tabs, Form, Input } from 'element-react';
@@ -21,6 +22,8 @@ class InstallView extends React.Component {
       prefix: '',
       pending: false
     };
+
+    $(document).on('selectstart', () => false);
   }
 
   redirect2index(code) {
@@ -97,7 +100,7 @@ class InstallView extends React.Component {
     return (
       <div className="flex-col-1 flex-items-center install-container">
         <div className="flex-center">
-          <Form ref="form-exists" model={ this.state } labelPosition="right" labelWidth="92" rules={ rules }>
+          <Form ref="form-exists" model={ this.state } labelPosition="right" labelWidth="82" rules={ rules }>
             <Form.Item prop="prefix" label="博客路径：">
               <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } append={ <Button onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
             </Form.Item>

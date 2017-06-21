@@ -1,6 +1,6 @@
 import url from 'url';
 import path from 'path';
-import glob from 'glob';
+// import glob from 'glob';
 import { app, BrowserWindow, Menu, MenuItem, ipcMain as ipc } from 'electron';
 import { autoUpdater } from 'electron-updater';
 
@@ -25,9 +25,10 @@ function sendStatusToWindow(message) {
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    title: 'Hexo 客户端',
     minWidth: 800,
     minHeight: 600,
-    icon: path.join(ASSETS_PATH, 'icon.png')
+    icon: path.join(__dirname, 'build', 'icon.ico')
   });
 
   let prefix = getPrefix(),
@@ -69,12 +70,12 @@ app.on('ready', function () {
   //   });
   // });
 
+  createWindow();
+
   registry(BlogController);
   registry(WindowController);
   registry(ArticleController);
   registry(SettingController);
-
-  createWindow();
 });
 
 app.on('activate', function () {

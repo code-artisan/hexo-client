@@ -10,6 +10,7 @@ import {
 
 import App from './app.jsx';
 import IndexView from './views/index.jsx';
+import AboutView from './views/about.jsx';
 import ArticleView from './views/article.jsx';
 import SettingView from './views/setting.jsx';
 import InstallView from './views/install.jsx';
@@ -20,6 +21,7 @@ const routes = (
       <IndexRoute component={ IndexView } />
       <Route path="article(/:filename)" component={ ArticleView } />
     </Route>
+    <Route path="/about" component={ AboutView } />
     <Route path="/setting" component={ SettingView } />
     <Route path="/install" component={ InstallView } />
   </Router>

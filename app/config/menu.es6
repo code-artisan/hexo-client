@@ -3,17 +3,15 @@ import path from 'path';
 import { app, shell, BrowserWindow } from 'electron';
 import { ASSETS_PATH } from './global.es6';
 import setting from '../../lib/setting.es6';
-
-const name = app.getName();
+import about from '../../lib/about.es6';
 
 module.exports = [
   {
-    label: 'Hexo Client',
-    role: name,
+    label: 'Hexo 客户端',
     submenu: [
       {
-        role: 'about',
-        label: `关于${ name }`
+        label: `关于 Hexo 客户端`,
+        click: about
       }, {
         type: 'separator'
       }, {
@@ -92,12 +90,6 @@ module.exports = [
     label: '帮助',
     role: 'help',
     submenu: [
-      {
-        label: '仓库地址',
-        click() {
-          shell.openExternal('https://github.com/code-artisan');
-        }
-      },
       {
         label: '关于作者',
         click() {

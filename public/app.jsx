@@ -7,6 +7,7 @@ import { ipcRenderer as ipc, remote } from 'electron';
 import { Button, Input, Menu as Sidebar, Icon, Loading } from 'element-react';
 import { shell } from 'electron';
 import execute from './utilities/socket.es6';
+import notify from './lib/notify.es6';
 
 const {
   Menu,
@@ -37,30 +38,30 @@ class App extends React.Component {
     $(window).on('refresh', this.fetch.bind(this));
   }
 
+  normalize() {
+    this.setState({
+      loading: false
+    });
+  }
+
   fetch() {
     execute({
       $type: 'article.list'
     })
-    .then(({result: articles, code}) => {
+    .then(({result, code}) => {
       if (code === 200) {
-        this.state.articles = articles;
+        this.state.articles = result;
       }
 
-      this.setState({
-        loading: false
-      });
+      return this.normalize();
     })
-    .catch(() => {
-      this.setState({
-        loading: false
-      });
+    .catch((e) => {
+      return this.normalize();
     });
   }
 
   refresh() {
-    this.setState({
-      loading: true
-    });
+    this.normalize();
 
     setTimeout(this.fetch.bind(this), 200);
   }
@@ -86,15 +87,8 @@ class App extends React.Component {
     execute({
       $type: 'blog.deploy'
     })
-    .then(({code}) => {
-      this.setState({
-        loading: false
-      });
-    }, function (e) {
-      this.setState({
-        loading: false
-      });
-    });
+    .then(this.normalize)
+    .catch(this.normalize);
   }
 
   handleOpenSettingWindow() {
@@ -118,6 +112,10 @@ class App extends React.Component {
     })
     .then((res) => {
       if (res.code === 204) {
+        notify('删除文章提示', {
+          body: `文章：${ filename } 已被删除`
+        });
+
         this.refresh();
 
         this.props.router.replace({
@@ -166,6 +164,36 @@ class App extends React.Component {
     });
   }
 
+  renderSidebar(resource) {
+    if (resource.length === 0) {
+      if (this.state.keywords.length === 0) {
+        return (
+          <li className="el-menu-msgs">暂无文章 &nbsp;
+            <Link to="/article" className="tool-item" title="撰写文章">
+              <i className="icon icon-plus" />
+            </Link>
+          </li>
+        );
+      }
+
+      return (<li className="el-menu-msgs">没有匹配的文章</li>);
+    }
+
+    return resource.map(({title}, index) => {
+      return (
+        <li key={ index }>
+          <Link
+            className="el-menu-item"
+            activeClassName="is-active"
+            to={`/article/${ title }`}
+          >
+            <i className="icon icon-article"></i> { title }
+          </Link>
+        </li>
+      );
+    });
+  }
+
   render() {
     let { articles, keywords } = this.state;
 
@@ -186,21 +214,7 @@ class App extends React.Component {
             onChange={ this.handleChangeKeywords.bind(this) }
           />
           <Sidebar theme="dark" className="scroll-y" ref="menu">
-            {
-              result.map(({title}, index) => {
-                return (
-                  <li key={ index }>
-                    <Link
-                      className="el-menu-item"
-                      activeClassName="is-active"
-                      to={`/article/${ title }`}
-                    >
-                      <i className="icon icon-article"></i> { title }
-                    </Link>
-                  </li>
-                );
-              })
-            }
+            { this.renderSidebar(result) }
           </Sidebar>
           <div className="sidebar-tools">
             {
@@ -216,9 +230,9 @@ class App extends React.Component {
             <a href="javascript:;" className="tool-item" onClick={ this.refresh.bind(this) } title="刷新列表">
               <i className="icon icon-refresh" />
             </a>
-            <a href="#/article" className="tool-item" title="撰写文章">
+            <Link to="/article" className="tool-item" title="撰写文章">
               <i className="icon icon-plus" />
-            </a>
+            </Link>
           </div>
         </div>
         { this.props.children }
