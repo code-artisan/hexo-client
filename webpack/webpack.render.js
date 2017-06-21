@@ -19,6 +19,10 @@ module.exports = merge({}, config, {
         })
       },
       {
+        test: /\.json$/,
+        loader: 'json-loader'
+      },
+      {
         test: /\.(woff|woff2|svg|eot|ttf|png|gif|jpg|jpeg)(.*?)?$/,
         loader: 'file-loader',
         query: {

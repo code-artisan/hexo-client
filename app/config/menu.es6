@@ -3,6 +3,7 @@ import path from 'path';
 import { app, shell, BrowserWindow } from 'electron';
 import { ASSETS_PATH } from './global.es6';
 import setting from '../../lib/setting.es6';
+import about from '../../lib/about.es6';
 
 const name = app.getName();
 
@@ -12,8 +13,8 @@ module.exports = [
     role: name,
     submenu: [
       {
-        role: 'about',
-        label: `关于${ name }`
+        label: `关于 ${ name }`,
+        click: about
       }, {
         type: 'separator'
       }, {

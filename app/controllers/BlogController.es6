@@ -1,9 +1,9 @@
 import path from 'path';
 import _ from 'underscore';
 import fs from 'fs-jetpack';
+import shell from 'shelljs';
 import response from '../../lib/response.es6';
 import { getPrefix } from '../../lib/utilities.es6';
-import shell from 'shelljs';
 
 function exec(command, options = {}) {
   options.async = true;

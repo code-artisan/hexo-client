@@ -10,13 +10,13 @@ module.exports = function () {
         pathname: path.join(ASSETS_PATH, 'index.html'),
         protocol: 'file:',
         slashes: true,
-        hash: '/setting'
+        hash: '/about'
       });
 
   let window = new BrowserWindow({
-        width: 400,
-        height: 200,
-        title: '偏好设置',
+        width: 283,
+        height: 175,
+        title: '关于 Hexo 客户端',
         resizable: ! isDevelopment,
         darkTheme: true,
         minimizable: false,
@@ -26,7 +26,7 @@ module.exports = function () {
   window.loadURL( file );
   window.setMenu( null );
 
-  if ( ! isDevelopment ) {
+  if ( isDevelopment ) {
     window.webContents.openDevTools();
   }
 };

@@ -3,6 +3,7 @@ import React from 'react';
 import _ from 'underscore';
 import { Input, Button, Loading } from 'element-react';
 
+import notify from '../lib/notify.es6';
 import execute from '../utilities/socket.es6';
 import ArticleEditor from '../components/article-editor/index.jsx';
 
@@ -16,9 +17,12 @@ class ArticleView extends React.Component {
 
     this.state = {
       article,
-      loading: false,
-      message: ''
+      loading: false
     };
+  }
+
+  normalize(loading = false) {
+    this.setState({ loading });
   }
 
   componentDidMount() {
@@ -27,28 +31,20 @@ class ArticleView extends React.Component {
 
   handleFetchArticle({filename}) {
     if (_.isString(filename)) {
-      this.setState({
-        loading: true
-      });
+      this.normalize(true);
 
       execute({
         $type: 'article.find',
         filename
       })
-      .then(({result: article, code}) => {
+      .then(({result, code}) => {
         if ( code === 200 ) {
-          this.state.article = article;
+          this.state.article = result;
         }
 
-        this.setState({
-          loading: false
-        });
+        this.normalize();
       })
-      .catch((error) => {
-        this.setState({
-          loading: false
-        });
-      });
+      .catch(this.normalize);
     } else {
       this.setState({ article });
     }
@@ -60,34 +56,40 @@ class ArticleView extends React.Component {
           body: this.refs.$edtior.refs.body.value
         };
 
-    this.setState({
-      loading: true,
-      message: '正在保存...'
-    });
+    this.normalize(true);
+
+    let filename = this.props.params.filename || article.title;
 
     execute({
       $type: 'article.save',
       article,
-      filename: this.props.params.filename || article.title
+      filename
     })
     .then(({code}) => {
-      this.setState({
-        loading: false,
-        message: code === 200 ? '保存成功' : '保存失败'
-      });
+      this.normalize();
 
       if ( code === 200) {
         $(window).trigger('refresh');
 
+        notify('保存文章提示', {
+          body: `文章：${ filename } 保存成功`
+        });
+
         this.props.router.replace({
           pathname: '/'
         });
+      } else {
+        notify('保存文章提示', {
+          body: `文章：${ filename } 保存失败`
+        });
       }
-    }, (e) => {
-      this.setState({
-        loading: false,
-        message: '保存失败'
+    })
+    .catch((e) => {
+      notify('保存文章提示', {
+        body: `文章：${ filename } 保存失败`
       });
+
+      this.normalize();
     });
   }
 
