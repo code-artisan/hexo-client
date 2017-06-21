@@ -20,6 +20,8 @@ class Setting extends React.Component {
     .then(({result}) => {
       this.setState(result);
     });
+
+    $(document).on('selectstart', () => false);
   }
 
   handleChangeDir(prefix) {
@@ -53,7 +55,7 @@ class Setting extends React.Component {
   render() {
     return (
       <div className="flex-col-1 setting-container flex-items-center">
-        <Form labelPosition="right" labelWidth="86">
+        <Form labelPosition="right" labelWidth="82">
           <Form.Item label="博客路径：">
             <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } readOnly append={ <Button onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
           </Form.Item>

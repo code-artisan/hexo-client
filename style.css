@@ -8422,6 +8422,9 @@ textarea {
 .el-form-item.is-error .el-input-group__append {
   border-color: #ff4949; }
 
+.el-form-item__label:before {
+  display: none; }
+
 @font-face {
   font-family: "iconfont";
   src: url(./public/assets/fonts/iconfont-8398d02fbd60d02d4217042e8b252b68.eot);

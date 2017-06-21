@@ -1,7 +1,15 @@
+import $ from 'jquery';
 import React from 'react';
 import pkg from '../../package.json';
 
 class AboutView extends React.Component {
+
+  constructor(props) {
+    super( props );
+
+    $(document).on('selectstart', () => false);
+  }
+
   render() {
     return (
       <div className="about-view">

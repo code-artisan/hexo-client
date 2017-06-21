@@ -17,3 +17,9 @@
     border-color: #ff4949;
   }
 }
+
+.el-form-item__label {
+  &:before {
+    display: none;
+  }
+}
