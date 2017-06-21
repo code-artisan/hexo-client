@@ -6,7 +6,7 @@ import { ipcRenderer as ipc } from 'electron';
 
 import './index.scss';
 import 'codemirror/lib/codemirror.css';
-import editormd from '../../lib/editormd/index.js';
+import editormd from '../../lib/editormd.js';
 
 class ArticleEditor extends React.Component {
   static defaultProps = {
