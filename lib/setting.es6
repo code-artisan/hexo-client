@@ -16,7 +16,6 @@ module.exports = function () {
   let window = new BrowserWindow({
         width: 400,
         height: 200,
-        title: '偏好设置',
         resizable: ! isDevelopment,
         darkTheme: true,
         minimizable: false,
