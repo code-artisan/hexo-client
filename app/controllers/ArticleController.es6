@@ -4,32 +4,7 @@ import glob from 'glob';
 import _ from 'underscore';
 import response from '../../lib/response.es6';
 import { getPrefix } from '../../lib/utilities.es6';
-
-function formatter(article) {
-  article = article.replace('---\n', '');
-
-  let array  = article.split('---'),
-      meta   = array.shift(),
-      result = {
-        body: array.pop().replace(/^(\n)*/, '').trim()
-      };
-
-  meta.split('\n').forEach(function (value) {
-    if (value.indexOf(':') !== -1) {
-      let arr = value.split(':'),
-          key = arr[0],
-          val = arr.slice(1).join(':');
-
-      if ( key === 'tags' ) {
-        val = val.replace(/\[|\]/g, '');
-      }
-
-      result[ key ] = val.trim();
-    }
-  });
-
-  return result;
-}
+import { json, markdown } from '../../lib/hexo.es6';
 
 function getFullpath(filename) {
   return path.join(getPrefix(), 'source', '_posts', `${filename}.md`);
@@ -56,9 +31,7 @@ module.exports = {
     fs
       .readAsync(filepath, 'utf8')
       .then(function (data) {
-        let article = formatter(data);
-
-        return done(response(article));
+        return done(response(json(data)));
       })
       .catch(function (e) {
         return done(response(500, '文章读取失败'));
@@ -78,11 +51,7 @@ module.exports = {
     }
 
     let filepath = getFullpath(filename),
-        content  = `---
-title: ${ (article.title || '').trim() }
-date: ${ (article.date || '').trim() }
-tags: [${ (article.tags || '').trim() }]
----\n\r${ (article.body || '').trim() }`;
+        content  = markdown(article);
 
     fs
       .writeAsync(filepath, content)

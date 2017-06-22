@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import React from 'react';
 import _ from 'underscore';
+import moment from 'moment';
 import { Input, Button, Loading } from 'element-react';
 
 import notify from '../lib/notify.es6';
@@ -55,6 +56,10 @@ class ArticleView extends React.Component {
           ...this.refs.$edtior.state.article,
           body: this.refs.$edtior.refs.body.value
         };
+
+    if ( ! _.has(article, 'date') ) {
+      article.date = moment().format('YYYY-MM-DD HH:mm:ss');
+    }
 
     this.normalize(true);
 

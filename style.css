@@ -8425,119 +8425,6 @@ textarea {
 .el-form-item__label:before {
   display: none; }
 
-@font-face {
-  font-family: "iconfont";
-  src: url(./public/assets/fonts/iconfont-8398d02fbd60d02d4217042e8b252b68.eot);
-  /* IE9*/
-  src: url(./public/assets/fonts/iconfont-8398d02fbd60d02d4217042e8b252b68.eot#iefix) format("embedded-opentype"), url(./public/assets/fonts/iconfont-afdb9c2c8165e78623528d0613f7312d.woff) format("woff"), url(./public/assets/fonts/iconfont-495ee56502ef34868525f348adce3a3e.ttf) format("truetype"), url(./public/assets/fonts/iconfont-b4cbf39ce3b0ef110e4f77932da57142.svg#iconfont) format("svg");
-  /* iOS 4.1- */ }
-
-.icon,
-.iconfont {
-  font-family: "iconfont" !important;
-  font-size: 14px;
-  font-weight: 400;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; }
-
-.icon-setting:before {
-  content: "\E617"; }
-
-.icon-search:before {
-  content: "\E606"; }
-
-.icon-upload:before {
-  content: "\E6A4"; }
-
-.icon-refresh:before {
-  content: "\E63A"; }
-
-.icon-trash:before {
-  content: "\E652"; }
-
-.icon-plus:before {
-  content: "\E666"; }
-
-.icon-preview:before {
-  content: "\E722"; }
-
-.icon-hide:before {
-  content: "\E76B"; }
-
-.icon-article:before {
-  content: "\E614"; }
-
-.scroll-y {
-  overflow-y: auto; }
-
-.d-block {
-  display: block !important; }
-
-.d-inline-block {
-  display: inline-block !important;
-  vertical-align: middle !important; }
-
-.d-inline {
-  display: inline !important; }
-
-.d-hide {
-  display: none; }
-
-.about-view {
-  display: flex;
-  flex-direction: column;
-  flex: 1 0 0%;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 0;
-  background-color: #ececec; }
-  .about-view .app-name {
-    margin: 5px 0 10px;
-    font-size: 16px;
-    font-weight: 500; }
-  .about-view .app-version {
-    font-size: 12px; }
-
-.install-container .el-tabs {
-  width: 400px;
-  height: 202px; }
-
-.install-container .el-form-item:last-of-type .el-button {
-  width: 100%;
-  display: block; }
-
-.install-container .el-tabs__nav {
-  width: 100%; }
-
-.install-container .el-tabs__item {
-  width: 50%;
-  text-align: center; }
-
-.setting-container {
-  padding: 0 40px 26px;
-  background-color: #ececec; }
-  .setting-container .form-btn {
-    padding: 4px 30px; }
-    .setting-container .form-btn:active {
-      color: #fff; }
-    .setting-container .form-btn ~ .form-btn {
-      margin-left: 10px; }
-  .setting-container .fixed-bottom {
-    position: absolute;
-    bottom: 5px;
-    right: 15px; }
-  .setting-container .el-checkbox {
-    margin-top: 8px; }
-  .setting-container .el-form-item {
-    margin-bottom: 15px; }
-  .setting-container .el-input__inner:focus, .setting-container .el-input__inner:hover {
-    border-color: #bfcbd9; }
-  .setting-container .el-form-item__label {
-    padding: 8px 12px 8px 0; }
-  .setting-container .el-form-item__content {
-    line-height: 1; }
-
 /*
  * Editor.md
  *
@@ -12213,3 +12100,116 @@ hr.editormd-page-break {
 
 .editormd-theme-dark .CodeMirror {
   border-right: 1px solid rgba(0, 0, 0, 0.1); }
+
+@font-face {
+  font-family: "iconfont";
+  src: url(./public/assets/fonts/iconfont-8398d02fbd60d02d4217042e8b252b68.eot);
+  /* IE9*/
+  src: url(./public/assets/fonts/iconfont-8398d02fbd60d02d4217042e8b252b68.eot#iefix) format("embedded-opentype"), url(./public/assets/fonts/iconfont-afdb9c2c8165e78623528d0613f7312d.woff) format("woff"), url(./public/assets/fonts/iconfont-495ee56502ef34868525f348adce3a3e.ttf) format("truetype"), url(./public/assets/fonts/iconfont-b4cbf39ce3b0ef110e4f77932da57142.svg#iconfont) format("svg");
+  /* iOS 4.1- */ }
+
+.icon,
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.icon-setting:before {
+  content: "\E617"; }
+
+.icon-search:before {
+  content: "\E606"; }
+
+.icon-upload:before {
+  content: "\E6A4"; }
+
+.icon-refresh:before {
+  content: "\E63A"; }
+
+.icon-trash:before {
+  content: "\E652"; }
+
+.icon-plus:before {
+  content: "\E666"; }
+
+.icon-preview:before {
+  content: "\E722"; }
+
+.icon-hide:before {
+  content: "\E76B"; }
+
+.icon-article:before {
+  content: "\E614"; }
+
+.scroll-y {
+  overflow-y: auto; }
+
+.d-block {
+  display: block !important; }
+
+.d-inline-block {
+  display: inline-block !important;
+  vertical-align: middle !important; }
+
+.d-inline {
+  display: inline !important; }
+
+.d-hide {
+  display: none; }
+
+.about-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 0%;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  background-color: #ececec; }
+  .about-view .app-name {
+    margin: 5px 0 10px;
+    font-size: 16px;
+    font-weight: 500; }
+  .about-view .app-version {
+    font-size: 12px; }
+
+.install-container .el-tabs {
+  width: 400px;
+  height: 202px; }
+
+.install-container .el-form-item:last-of-type .el-button {
+  width: 100%;
+  display: block; }
+
+.install-container .el-tabs__nav {
+  width: 100%; }
+
+.install-container .el-tabs__item {
+  width: 50%;
+  text-align: center; }
+
+.setting-container {
+  padding: 0 40px 26px;
+  background-color: #ececec; }
+  .setting-container .form-btn {
+    padding: 4px 30px; }
+    .setting-container .form-btn:active {
+      color: #fff; }
+    .setting-container .form-btn ~ .form-btn {
+      margin-left: 10px; }
+  .setting-container .fixed-bottom {
+    position: absolute;
+    bottom: 5px;
+    right: 15px; }
+  .setting-container .el-checkbox {
+    margin-top: 8px; }
+  .setting-container .el-form-item {
+    margin-bottom: 15px; }
+  .setting-container .el-input__inner:focus, .setting-container .el-input__inner:hover {
+    border-color: #bfcbd9; }
+  .setting-container .el-form-item__label {
+    padding: 8px 12px 8px 0; }
+  .setting-container .el-form-item__content {
+    line-height: 1; }

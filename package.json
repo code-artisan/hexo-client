@@ -48,6 +48,7 @@
     "hexo-server": "^0.2.1",
     "jquery": "^3.2.1",
     "marked": "^0.3.6",
+    "moment": "^2.18.1",
     "normalize.css": "^7.0.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
