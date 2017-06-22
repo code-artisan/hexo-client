@@ -5,10 +5,10 @@
 @import 'sidebar.scss';
 @import 'element.scss';
 
+@import 'editormd.scss';
 @import 'iconfont.scss';
 @import 'utilities.scss';
 
-@import 'about.scss';
-@import 'install.scss';
-@import 'setting.scss';
-@import 'editormd.scss';
+@import 'views/about.scss';
+@import 'views/install.scss';
+@import 'views/setting.scss';
