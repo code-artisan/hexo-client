@@ -103,14 +103,19 @@ class ArticleView extends React.Component {
   }
 
   render() {
+    let { date } = this.state.article;
+
     return (
       <div className="flex-col-1 article-editor">
         <Loading loading={ this.state.loading } className="flex-col-1" text={ this.state.message }>
           <ArticleEditor ref="$edtior" article={ this.state.article } />
 
-          <div className="flex-row m-t-15">
+          <div className="flex-row m-t-15 flex-items-middle">
             <Button type="primary" onClick={ this.handleSaveArticle.bind(this) }>保存</Button>
             <a className="el-button el-button--danger" href="#/">取消</a>
+            {
+              date ? ( <span className="article-date">撰写于：{ date }</span> ) : null
+            }
           </div>
         </Loading>
       </div>

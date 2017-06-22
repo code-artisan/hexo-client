@@ -106,23 +106,26 @@ class App extends React.Component {
   }
 
   handleRemoveArticle(filename) {
-    execute({
-      $type: 'article.remove',
-      filename
-    })
-    .then((res) => {
-      if (res.code === 204) {
-        notify('删除文章提示', {
-          body: `文章：${ filename } 已被删除`
-        });
+    if (confirm('确定要删除这篇文章？')) {
+      execute({
+        $type: 'article.remove',
+        filename
+      })
+      .then((res) => {
+        if (res.code === 204) {
+          notify('删除文章提示', {
+            body: `文章：${ filename } 已被删除`
+          });
 
-        this.refresh();
+          this.refresh();
 
-        this.props.router.replace({
-          pathname: '/'
-        });
-      }
-    });
+          this.props.router.replace({
+            pathname: '/'
+          });
+        }
+      });
+    }
+
   }
 
   registryContextMenu() {
@@ -155,13 +158,15 @@ class App extends React.Component {
 
     let node = ReactDOM.findDOMNode(this.refs.menu);
 
-    $(node).on('contextmenu', (event) => {
-      event.preventDefault();
+    $(node)
+      .on('dragstart'  , () => false)
+      .on('contextmenu', (event) => {
+        event.preventDefault();
 
-      this.pathname = event.target.hash.trim().substr(1);
+        this.pathname = event.target.hash.trim().substr(1);
 
-      menu.popup(remote.getCurrentWindow());
-    });
+        menu.popup(remote.getCurrentWindow());
+      });
   }
 
   renderSidebar(resource) {
