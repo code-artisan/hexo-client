@@ -9,6 +9,8 @@ import registry from './lib/socket.es6';
 import template from './app/config/menu.es6';
 import { getPrefix } from './lib/utilities.es6';
 
+import shell from 'shelljs';
+
 import editorMenu from './app/config/context/editor.es6';
 
 import BlogController from './app/controllers/BlogController.es6';
@@ -21,6 +23,19 @@ let mainWindow = null;
 function sendStatusToWindow(message) {
   mainWindow.webContents.send('message', message);
 }
+
+
+if ( shell.which('hexo').code === 0 ) {
+
+}
+if (shell.exec('git commit -am "Auto-commit"').code !== 0) {
+  shell.echo('Error: Git commit failed');
+  shell.exit(1);
+}
+// if (shell.exec('echo hello > ./hello.text') !== 0) {
+//   shell.echo('Error: exec failed.');
+//   shell.exit(1);
+// }
 
 function createWindow() {
   // Create the browser window.
