@@ -25,6 +25,8 @@ function sendStatusToWindow(message) {
 }
 
 
+console.log(shell.config.execPath, process.execPath);
+
 if ( shell.which('hexo').code === 0 ) {
 
 }
