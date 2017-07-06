@@ -149,7 +149,7 @@
 .cm-s-default .cm-variable-2 {
   color: #05a; }
 
-.cm-s-default .cm-variable-3 {
+.cm-s-default .cm-variable-3, .cm-s-default .cm-type {
   color: #085; }
 
 .cm-s-default .cm-comment {

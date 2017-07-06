@@ -14,10 +14,7 @@
       "./renderer.js",
       "./style.css",
       "./public"
-    ],
-    "dmg": {
-      "backgroundColor": "#161d22"
-    }
+    ]
   },
   "scripts": {
     "start": "webpack --env development -w --config webpack/webpack.config.js",
