@@ -28,10 +28,7 @@ function sendStatusToWindow(message) {
 if ( shell.which('hexo').code === 0 ) {
 
 }
-if (shell.exec('git commit -am "Auto-commit"').code !== 0) {
-  shell.echo('Error: Git commit failed');
-  shell.exit(1);
-}
+
 // if (shell.exec('echo hello > ./hello.text') !== 0) {
 //   shell.echo('Error: exec failed.');
 //   shell.exit(1);
