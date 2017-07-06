@@ -24,12 +24,15 @@ function sendStatusToWindow(message) {
   mainWindow.webContents.send('message', message);
 }
 
+let { stdout } = shell.which('node');
 
-console.log(shell.config.execPath, process.execPath);
-
-if ( shell.which('hexo').code === 0 ) {
-
+if ( typeof stdout === 'string' ) {
+  shell.config.execPath = stdout;
 }
+console.log( shell.config.execPath );
+// if ( shell.which('hexo').code === 0 ) {
+
+// }
 
 // if (shell.exec('echo hello > ./hello.text') !== 0) {
 //   shell.echo('Error: exec failed.');
