@@ -1,5 +1,6 @@
 import url from 'url';
 import path from 'path';
+import fs from 'fs-jetpack';
 // import glob from 'glob';
 import { app, BrowserWindow, Menu, MenuItem, ipcMain as ipc } from 'electron';
 import { autoUpdater } from 'electron-updater';
@@ -8,8 +9,6 @@ import { ASSETS_PATH } from './app/config/global.es6';
 import registry from './lib/socket.es6';
 import template from './app/config/menu.es6';
 import { getPrefix } from './lib/utilities.es6';
-
-import shell from 'shelljs';
 
 import editorMenu from './app/config/context/editor.es6';
 
@@ -22,21 +21,6 @@ let mainWindow = null;
 
 function sendStatusToWindow(message) {
   mainWindow.webContents.send('message', message);
-}
-
-let { stdout } = shell.which('node');
-
-if ( typeof stdout === 'string' ) {
-  shell.config.execPath = stdout;
-}
-
-// if ( shell.which('hexo').code === 0 ) {
-
-// }
-
-if (shell.exec('git commit -am "Auto-commit"').code !== 0) {
-  shell.echo('Error: Git commit failed');
-  shell.exit(1);
 }
 
 function createWindow() {

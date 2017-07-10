@@ -61,7 +61,9 @@ class App extends React.Component {
   }
 
   refresh() {
-    this.normalize();
+    this.setState({
+      loading: true
+    });
 
     setTimeout(this.fetch.bind(this), 200);
   }
@@ -87,8 +89,22 @@ class App extends React.Component {
     execute({
       $type: 'blog.deploy'
     })
-    .then(this.normalize)
-    .catch(this.normalize);
+    .then(({code}) => {
+      this.normalize();
+
+      if (code === 200) {
+        notify('发布文章', {
+          body: `文章发布成功`
+        });
+      }
+    })
+    .catch(() => {
+      this.normalize();
+
+      notify('发布文章', {
+        body: `文章发布失败`
+      });
+    });
   }
 
   handleOpenSettingWindow() {
@@ -132,7 +148,6 @@ class App extends React.Component {
     menu.append(new MenuItem({
       label: '编辑',
       click: () => {
-        console.log(this.pathname);
         this.props.router.replace({
           pathname: this.pathname
         });
@@ -231,6 +246,9 @@ class App extends React.Component {
             }
             <a href="javascript:;" className="tool-item" onClick={ this.handleOpenSettingWindow.bind(this) } title="偏好设置">
               <i className="icon icon-setting" />
+            </a>
+            <a href="javascript:;" className="tool-item" onClick={ this.handlePublishBlog.bind(this) } title="编译发布">
+              <i className="icon icon-upload" />
             </a>
             <a href="javascript:;" className="tool-item" onClick={ this.refresh.bind(this) } title="刷新列表">
               <i className="icon icon-refresh" />
