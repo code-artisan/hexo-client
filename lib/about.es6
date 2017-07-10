@@ -16,7 +16,6 @@ module.exports = function () {
   let window = new BrowserWindow({
         width: 283,
         height: 175,
-        title: '关于 Hexo 客户端',
         resizable: ! isDevelopment,
         darkTheme: true,
         minimizable: false,

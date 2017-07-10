@@ -11,6 +11,16 @@ function exec(command, options = {}) {
   return shell.exec(command, options);
 }
 
+var checkNodeEnv = function () {
+  let node = shell.which('node');
+
+  if ( typeof node.stdout === 'string' ) {
+    shell.config.execPath = node.stdout;
+  }
+
+  return shell.which('hexo').code === 0;
+}
+
 module.exports = {
   /**
    * 初始化博客.
@@ -18,16 +28,23 @@ module.exports = {
    * @return {Object}
    */
   '$blog.init': function (done) {
-    try {
-      shell.cd(getPrefix() + '/blog');
+    if ( ! checkNodeEnv() ) {
+      return done(response(500, '初始化失败'));
+    }
 
-      let child = exec('hexo init blog');
+    try {
+      let prefix = getPrefix().replace(/\/$/, ''),
+          index = prefix.lastIndexOf('/'); // 获取不带目录名称的前缀
+
+      shell.cd(prefix.substr(0, index));
+
+      let child = exec(`hexo init ${ prefix.substr(index + 1) }`);
 
       child.on('close', function () {
         return done(response(200, '初始化成功'));
       });
     } catch (e) {
-      fs.write('/Users/artisan/Desktop/hexo.log', 'error:'+ e);
+      return done(response(500, '初始化失败'));
     }
   },
 
@@ -37,6 +54,8 @@ module.exports = {
    * @return {Object}
    */
   '$blog.deploy': function (done) {
+    if ( ! checkNodeEnv() ) return;
+
     shell.cd(path.join(getPrefix(), 'blog'));
 
     // 编译文章.
@@ -46,16 +65,16 @@ module.exports = {
       // 发布文章.
       let deployer = exec('hexo deploy');
 
-      deployer.stderr.on('data', function () {
-        return done(response(500, '发布失败'));
-      });
-
       deployer.on('close', function () {
         return (done(response('发布成功')));
       });
+
+      deployer.stderr.on('data', function () {
+        return done(response(500, '发布失败'));
+      });
     });
 
-    generator.stderr.on('data', function () {
+    generator.stderr.on('data', function (e) {
       return done(response(500, '编译失败'));
     });
   }

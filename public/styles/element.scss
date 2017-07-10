@@ -12,9 +12,11 @@
   text-align: center;
 }
 
-.el-form-item.is-error {
-  .el-input-group__append {
-    border-color: #ff4949;
+.el-form-item {
+  &.is-error {
+    .el-input-group__append {
+      border-color: #ff4949;
+    }
   }
 }
 
@@ -22,4 +24,8 @@
   &:before {
     display: none;
   }
+}
+
+.el-input-group__prepend {
+  user-select: none;
 }

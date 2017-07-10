@@ -149,7 +149,7 @@
 .cm-s-default .cm-variable-2 {
   color: #05a; }
 
-.cm-s-default .cm-variable-3 {
+.cm-s-default .cm-variable-3, .cm-s-default .cm-type {
   color: #085; }
 
 .cm-s-default .cm-comment {
@@ -8425,6 +8425,9 @@ textarea {
 .el-form-item__label:before {
   display: none; }
 
+.el-input-group__prepend {
+  user-select: none; }
+
 /*
  * Editor.md
  *
@@ -11006,7 +11009,8 @@ textarea {
   font-family: "Microsoft YaHei", Helvetica, "Meiryo UI", "Malgun Gothic", "Segoe UI", "Trebuchet MS", "Monaco", monospace, Tahoma, STXihei, "\534E\6587\7EC6\9ED1", STHeiti, "Helvetica Neue", "Droid Sans", "wenquanyi micro hei", FreeSans, Arimo, Arial, SimSun, "\5B8B\4F53", Heiti, "\9ED1\4F53", sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  word-wrap: break-word; }
+  word-wrap: break-word;
+  user-select: none; }
 
 .markdown-body a {
   background: transparent; }
@@ -12174,6 +12178,11 @@ hr.editormd-page-break {
     font-weight: 500; }
   .about-view .app-version {
     font-size: 12px; }
+
+.article-editor .article-date {
+  font-size: 12px;
+  margin-left: 15px;
+  user-select: none; }
 
 .install-container .el-tabs {
   width: 400px;

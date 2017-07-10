@@ -61,7 +61,9 @@ class App extends React.Component {
   }
 
   refresh() {
-    this.normalize();
+    this.setState({
+      loading: true
+    });
 
     setTimeout(this.fetch.bind(this), 200);
   }
@@ -87,8 +89,22 @@ class App extends React.Component {
     execute({
       $type: 'blog.deploy'
     })
-    .then(this.normalize)
-    .catch(this.normalize);
+    .then(({code}) => {
+      this.normalize();
+
+      if (code === 200) {
+        notify('发布文章', {
+          body: `文章发布成功`
+        });
+      }
+    })
+    .catch(() => {
+      this.normalize();
+
+      notify('发布文章', {
+        body: `文章发布失败`
+      });
+    });
   }
 
   handleOpenSettingWindow() {
@@ -106,30 +122,32 @@ class App extends React.Component {
   }
 
   handleRemoveArticle(filename) {
-    execute({
-      $type: 'article.remove',
-      filename
-    })
-    .then((res) => {
-      if (res.code === 204) {
-        notify('删除文章提示', {
-          body: `文章：${ filename } 已被删除`
-        });
+    if (confirm('确定要删除这篇文章？')) {
+      execute({
+        $type: 'article.remove',
+        filename
+      })
+      .then((res) => {
+        if (res.code === 204) {
+          notify('删除文章提示', {
+            body: `文章：${ filename } 已被删除`
+          });
 
-        this.refresh();
+          this.refresh();
 
-        this.props.router.replace({
-          pathname: '/'
-        });
-      }
-    });
+          this.props.router.replace({
+            pathname: '/'
+          });
+        }
+      });
+    }
+
   }
 
   registryContextMenu() {
     menu.append(new MenuItem({
       label: '编辑',
       click: () => {
-        console.log(this.pathname);
         this.props.router.replace({
           pathname: this.pathname
         });
@@ -155,13 +173,15 @@ class App extends React.Component {
 
     let node = ReactDOM.findDOMNode(this.refs.menu);
 
-    $(node).on('contextmenu', (event) => {
-      event.preventDefault();
+    $(node)
+      .on('dragstart'  , () => false)
+      .on('contextmenu', (event) => {
+        event.preventDefault();
 
-      this.pathname = event.target.hash.trim().substr(1);
+        this.pathname = event.target.hash.trim().substr(1);
 
-      menu.popup(remote.getCurrentWindow());
-    });
+        menu.popup(remote.getCurrentWindow());
+      });
   }
 
   renderSidebar(resource) {
@@ -226,6 +246,9 @@ class App extends React.Component {
             }
             <a href="javascript:;" className="tool-item" onClick={ this.handleOpenSettingWindow.bind(this) } title="偏好设置">
               <i className="icon icon-setting" />
+            </a>
+            <a href="javascript:;" className="tool-item" onClick={ this.handlePublishBlog.bind(this) } title="编译发布">
+              <i className="icon icon-upload" />
             </a>
             <a href="javascript:;" className="tool-item" onClick={ this.refresh.bind(this) } title="刷新列表">
               <i className="icon icon-refresh" />

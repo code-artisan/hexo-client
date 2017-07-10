@@ -15,7 +15,6 @@ module.exports = [
       }, {
         type: 'separator'
       }, {
-        role: 'services',
         label: '偏好设置',
         accelerator: 'CmdOrCtrl+,',
         click: setting
