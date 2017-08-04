@@ -21,6 +21,8 @@ class ArticleEditor extends React.Component {
     this.state = {
       article: props.article
     };
+
+    this._shouldUpdateEditor = true;
   }
 
   componentDidMount() {
@@ -64,14 +66,23 @@ class ArticleEditor extends React.Component {
   }
 
   componentDidUpdate() {
-    this.handleMountEditor();
+    let { _shouldUpdateEditor } = this;
+
+    if (_shouldUpdateEditor) {
+      this.handleMountEditor();
+      this._shouldUpdateEditor = false;
+    }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.state.article = nextProps.article;
+  componentWillReceiveProps({article}) {
+    this.state.article = article;
 
-    if (this.props.article.body !== nextProps.article.body) {
-      this.handleMountEditor();
+    let prevArticle = this.props.article;
+
+    if (
+      prevArticle.title !== article.title
+    ) {
+      this._shouldUpdateEditor = true;
     }
   }
 
