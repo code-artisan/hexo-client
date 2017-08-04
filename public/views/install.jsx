@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import _ from 'underscore';
 import React from 'react';
-import { Button, Tabs, Form, Input } from 'element-react';
+import { Loading, Button, Tabs, Form, Input } from 'element-react';
 import execute from '../utilities/socket.es6';
 import notify from '../lib/notify.es6';
 
@@ -25,7 +25,8 @@ class InstallView extends React.Component {
       url: '',
       prefix: '',
       dirname: '',
-      pending: false
+      pending: false,
+      message: null
     };
 
     $(document).on('selectstart', () => false);
@@ -72,9 +73,12 @@ class InstallView extends React.Component {
     this.refs[form].validate((valid) => {
       if ( valid === false ) return;
 
+      let message = isNewForm ? '正在初始化博客' : '正在加载博客数据';
+
       if (isNewForm) {
         this.setState({
-          pending: true
+          message,
+          pending: true,
         });
       }
 
@@ -87,21 +91,40 @@ class InstallView extends React.Component {
       execute({
         $type: 'setting.set',
         setting
-      }).then(({code}) => {
+      })
+      .then(({code}) => {
         if ( isNewForm ) {
           return execute({
             $type: 'blog.init'
           });
         }
 
-        this.redirect2index(code);
-      }).then(({code}) => {
-        let body = `博客初始化${ code === 200 ? '成功' : '失败' }`;
-
-        // Notification.
-        notify('初始化博客', { body });
+        this.setState({
+          pending: false
+        });
 
         this.redirect2index(code);
+      })
+      .then((res) => {
+        if (res && res.code) {
+          this.setState({
+            pending: false
+          });
+
+          let title = '初始化博客',
+              isFaild = res.code !== 200;
+
+          if ( isFaild === true ) {
+            title += '失败';
+          } else {
+            title += '成功';
+            this.redirect2index(res.code);
+          }
+
+          notify(title, {
+            body: res.message
+          });
+        }
       })
       .catch((e) => {
         notify('初始化博客', {
@@ -121,35 +144,37 @@ class InstallView extends React.Component {
     return (
       <div className="flex-col-1 flex-items-center install-container">
         <div className="flex-center">
-          <Tabs onTabClick={ this.handleSwitchTab.bind(this) }>
-            <Tabs.Pane label="已有博客" name="1">
-              <Form ref="form-exists" model={ this.state } labelPosition="right" labelWidth="92" rules={ rules }>
-                <Form.Item prop="prefix" label="博客路径：">
-                  <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } readOnly append={ <Button disabled={ this.state.pending } onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
-                </Form.Item>
-                <Form.Item prop="url" label="博客地址：">
-                  <Input placeholder="请设置博客地址" size="small" disabled={ this.state.pending } value={ this.state.url } onChange={ this.handleSetBlogURL.bind(this) } />
-                </Form.Item>
-                <Form.Item labelWidth="0">
-                  <Button type="primary" size="small" nativeType="submit" onClick={ this.handleSaveSetting.bind(this, 'form-exists') }>开始写作</Button>
-                </Form.Item>
-              </Form>
-            </Tabs.Pane>
+          <Loading loading={ this.state.pending } text={ this.state.message }>
+            <Tabs onTabClick={ this.handleSwitchTab.bind(this) }>
+              <Tabs.Pane label="已有博客" name="1">
+                <Form ref="form-exists" model={ this.state } labelPosition="right" labelWidth="92" rules={ rules }>
+                  <Form.Item prop="prefix" label="博客路径：">
+                    <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } readOnly append={ <Button disabled={ this.state.pending } onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
+                  </Form.Item>
+                  <Form.Item prop="url" label="博客地址：">
+                    <Input placeholder="请设置博客地址" size="small" value={ this.state.url } onChange={ this.handleSetBlogURL.bind(this) } />
+                  </Form.Item>
+                  <Form.Item labelWidth="0">
+                    <Button type="primary" size="small" nativeType="submit" onClick={ this.handleSaveSetting.bind(this, 'form-exists') }>开始写作</Button>
+                  </Form.Item>
+                </Form>
+              </Tabs.Pane>
 
-            <Tabs.Pane label="新建博客" name="2">
-              <Form ref="form-new" model={ this.state } labelPosition="right" labelWidth="92" rules={ rules }>
-                <Form.Item prop="prefix" label="博客路径：">
-                  <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } readOnly append={ <Button disabled={ this.state.pending } onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
-                </Form.Item>
-                <Form.Item prop="dirname" label="目录名称：">
-                  <Input placeholder="请设置目录名称" size="small" value={ this.state.dirname } disabled={ this.state.pending } onChange={ this.handleSetDirname.bind(this) } />
-                </Form.Item>
-                <Form.Item labelWidth="0">
-                  <Button type="primary" size="small" nativeType="submit" onClick={ this.handleSaveSetting.bind(this, 'form-new') } loading={ this.state.pending }>开始写作</Button>
-                </Form.Item>
-              </Form>
-            </Tabs.Pane>
-          </Tabs>
+              <Tabs.Pane label="新建博客" name="2">
+                <Form ref="form-new" model={ this.state } labelPosition="right" labelWidth="92" rules={ rules }>
+                  <Form.Item prop="prefix" label="博客路径：">
+                    <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } readOnly append={ <Button disabled={ this.state.pending } onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
+                  </Form.Item>
+                  <Form.Item prop="dirname" label="目录名称：">
+                    <Input placeholder="请设置目录名称" size="small" value={ this.state.dirname } disabled={ this.state.pending } onChange={ this.handleSetDirname.bind(this) } />
+                  </Form.Item>
+                  <Form.Item labelWidth="0">
+                    <Button type="primary" size="small" nativeType="submit" onClick={ this.handleSaveSetting.bind(this, 'form-new') }>开始写作</Button>
+                  </Form.Item>
+                </Form>
+              </Tabs.Pane>
+            </Tabs>
+          </Loading>
         </div>
       </div>
     );

@@ -69,6 +69,10 @@ class ArticleEditor extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.state.article = nextProps.article;
+
+    if (this.props.article.body !== nextProps.article.body) {
+      this.handleMountEditor();
+    }
   }
 
   handleChange(field, value) {

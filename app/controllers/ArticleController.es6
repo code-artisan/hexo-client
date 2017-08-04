@@ -5,6 +5,7 @@ import _ from 'underscore';
 import response from '../../lib/response.es6';
 import { getPrefix } from '../../lib/utilities.es6';
 import { json, markdown } from '../../lib/hexo.es6';
+import logger from '../../lib/logger.es6';
 
 function getFullpath(filename) {
   return path.join(getPrefix(), 'source', '_posts', `${filename}.md`);
@@ -33,7 +34,8 @@ module.exports = {
       .then(function (data) {
         return done(response(json(data)));
       })
-      .catch(function (e) {
+      .catch(function (reason) {
+        logger.error(`文章读取失败：${ reason }`);
         return done(response(500, '文章读取失败'));
       });
   },
@@ -58,7 +60,8 @@ module.exports = {
       .then(function () {
         return done(response());
       })
-      .catch(function () {
+      .catch(function (reason) {
+        logger.error(`保存失败：${ reason }`);
         return done(response(500, '保存失败'));
       });
   },
@@ -81,8 +84,9 @@ module.exports = {
 
         return done(response(articles));
       });
-    } catch (e) {
-      return done(response(500));
+    } catch (reason) {
+      logger.error(`列表获取失败：${ reason }`);
+      return done(response(500, '列表获取失败'));
     }
   },
 
@@ -100,7 +104,8 @@ module.exports = {
       .then(function () {
         return done(response(204, '删除成功'));
       })
-      .catch(function (e) {
+      .catch(function (reason) {
+        logger.error(`删除失败：${ reason }`);
         return done(response(500, '删除失败'));
       });
   }

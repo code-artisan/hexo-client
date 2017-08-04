@@ -4,6 +4,7 @@ import fs from 'fs-jetpack';
 import setting from '../../lib/setting.es6';
 import response from '../../lib/response.es6';
 import { ROOT_DIR } from '../config/global.es6';
+import logger from '../../lib/logger.es6';
 
 const filepath = path.join(ROOT_DIR, 'Config', 'setting.json');
 
@@ -22,7 +23,10 @@ module.exports = {
       }
 
       return done(response(result));
-    } catch (e) { }
+    } catch (reason) {
+      logger.error(`配置读取失败：${ reason }`);
+      return done(response(500, '配置读取失败'));
+    }
   },
 
   '$setting.set': function (done, {setting}) {
@@ -35,8 +39,9 @@ module.exports = {
       });
 
       return done(response(200));
-    } catch (e) {
-      return done(response(500));
+    } catch (reason) {
+      logger.error(`配置保存失败：${ reason }`);
+      return done(response(500, '配置保存失败'));
     }
   },
 

@@ -92,7 +92,7 @@ class App extends React.Component {
     .then(({code}) => {
       this.normalize();
 
-      if (code === 200) {
+      if ( code === 200 ) {
         notify('发布文章', {
           body: `文章发布成功`
         });
