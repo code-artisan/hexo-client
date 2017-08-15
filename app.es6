@@ -1,6 +1,7 @@
 import url from 'url';
 import path from 'path';
 import fs from 'fs-jetpack';
+
 // import glob from 'glob';
 import { app, BrowserWindow, Menu, MenuItem, ipcMain as ipc } from 'electron';
 import { autoUpdater } from 'electron-updater';

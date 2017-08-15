@@ -4,6 +4,7 @@ import fs from 'fs-jetpack';
 import shell from 'shelljs';
 import response from '../../lib/response.es6';
 import { getPrefix } from '../../lib/utilities.es6';
+import logger from '../../lib/logger.es6';
 
 function exec(command, options = {}) {
   options.async = true;
@@ -11,7 +12,7 @@ function exec(command, options = {}) {
   return shell.exec(command, options);
 }
 
-var checkNodeEnv = function () {
+var checkEnvironment = function () {
   let node = shell.which('node');
 
   if ( typeof node.stdout === 'string' ) {
@@ -28,7 +29,8 @@ module.exports = {
    * @return {Object}
    */
   '$blog.init': function (done) {
-    if ( ! checkNodeEnv() ) {
+    if ( ! checkEnvironment() ) {
+      logger.error('博客初始化失败：环境欠缺');
       return done(response(500, '初始化失败'));
     }
 
@@ -36,14 +38,33 @@ module.exports = {
       let prefix = getPrefix().replace(/\/$/, ''),
           index = prefix.lastIndexOf('/'); // 获取不带目录名称的前缀
 
+      if ( fs.exists(prefix) === 'dir' ) {
+        return done(response(500, '文件夹已存在'));
+      }
+
       shell.cd(prefix.substr(0, index));
 
       let child = exec(`hexo init ${ prefix.substr(index + 1) }`);
 
       child.on('close', function () {
-        return done(response(200, '初始化成功'));
+        return done(response(200, '初始化成功，快去撰写博文吧~'));
       });
-    } catch (e) {
+
+      child.stderr.on('data', function (reason) {
+        logger.warn(`博客初始化异常：${ reason }`);
+
+        if (/^WARN/.test(reason)) {
+          let message = '初始化失败';
+
+          if (/npm\sinstall/.test(reason)) {
+            message = '博客依赖包安装失败';
+          }
+
+          return done(response(500, message));
+        }
+      });
+    } catch (reason) {
+      logger.error(`博客初始化失败：${ reason }`);
       return done(response(500, '初始化失败'));
     }
   },
@@ -54,28 +75,26 @@ module.exports = {
    * @return {Object}
    */
   '$blog.deploy': function (done) {
-    if ( ! checkNodeEnv() ) return;
+    if ( ! checkEnvironment() ) {
+      logger.error('博客发布失败：环境欠缺...');
+      return done(response(500, '初始化失败'));
+    }
 
-    shell.cd(path.join(getPrefix(), 'blog'));
+    shell.cd(path.join(getPrefix()));
 
-    // 编译文章.
-    let generator = exec('hexo generate');
+    // 编译并发布文章.
+    let generator = exec('hexo generate -d');
 
     generator.on('close', function () {
-      // 发布文章.
-      let deployer = exec('hexo deploy');
-
-      deployer.on('close', function () {
-        return (done(response('发布成功')));
-      });
-
-      deployer.stderr.on('data', function () {
-        return done(response(500, '发布失败'));
-      });
+      return done(response('发布成功'));
     });
 
-    generator.stderr.on('data', function (e) {
-      return done(response(500, '编译失败'));
+    generator.stderr.on('data', function (reason) {
+      if (reason === 'Everything up-to-date') {
+        return done(response('发布成功'));
+      }
+
+      logger.error(`博客发布异常：${ reason }`);
     });
   }
 };
