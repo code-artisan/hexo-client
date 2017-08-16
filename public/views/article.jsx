@@ -73,7 +73,7 @@ class ArticleView extends React.Component {
     .then(({code}) => {
       this.normalize();
 
-      if ( code === 200) {
+      if ( code === 200 ) {
         $(window).trigger('refresh');
 
         notify('保存文章提示', {

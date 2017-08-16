@@ -23,6 +23,8 @@ class ArticleEditor extends React.Component {
     };
 
     this._shouldUpdateEditor = true;
+
+    this._editor = null;
   }
 
   componentDidMount() {
@@ -33,7 +35,7 @@ class ArticleEditor extends React.Component {
     let { article } = this.state;
 
     if ( _.has(article, 'body') ) {
-      editormd('editormd', {
+      this._editor = editormd('editormd', {
         emoji: true,
         path: '../lib/',
         autoFocus: false,
@@ -69,6 +71,7 @@ class ArticleEditor extends React.Component {
     let { _shouldUpdateEditor } = this;
 
     if (_shouldUpdateEditor) {
+      this._editor.clear();
       this.handleMountEditor();
       this._shouldUpdateEditor = false;
     }
@@ -84,6 +87,10 @@ class ArticleEditor extends React.Component {
     ) {
       this._shouldUpdateEditor = true;
     }
+  }
+
+  componentWillUnmount() {
+    this._editor = null;
   }
 
   handleChange(field, value) {
@@ -106,7 +113,7 @@ class ArticleEditor extends React.Component {
         <Input placeholder="请输入关键词，多个请用英文逗号 ',' 隔开" prepend="关键词" value={ article.tags } onChange={ this.handleChange.bind(this, 'tags') } />
 
         <div ref="editor" id="editormd" className="pure-u-1 el-input">
-          <textarea ref="body" className="d-hide" value={ article.body } />
+          <textarea ref="body" className="d-hide" value={ article.body || '' } onChange={ () => {} } />
         </div>
       </div>
     );
