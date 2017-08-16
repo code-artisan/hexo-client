@@ -122,7 +122,7 @@ class App extends React.Component {
   }
 
   handleRemoveArticle(filename) {
-    if (confirm('确定要删除这篇文章？')) {
+    if (confirm(`确定要删除 ${ filename } 这篇文章？`)) {
       execute({
         $type: 'article.remove',
         filename
@@ -146,7 +146,7 @@ class App extends React.Component {
 
   registryContextMenu() {
     menu.append(new MenuItem({
-      label: '编辑',
+      label: '编辑文章',
       click: () => {
         this.props.router.replace({
           pathname: this.pathname
@@ -159,7 +159,7 @@ class App extends React.Component {
     }));
 
     menu.append(new MenuItem({
-      label: '删除',
+      label: '删除文章',
       click: () => {
         let pathname = this.pathname.split('/').pop();
 
