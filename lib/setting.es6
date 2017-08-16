@@ -19,7 +19,8 @@ module.exports = function () {
         resizable: ! isDevelopment,
         darkTheme: true,
         minimizable: false,
-        maximizable: false
+        maximizable: false,
+        fullscreen: false
       });
 
   window.loadURL( file );

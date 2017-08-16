@@ -11,7 +11,8 @@ module.exports = {
           title,
           resizable: false,
           minimizable: false,
-          maximizable: false
+          maximizable: false,
+          fullscreen: false
         });
 
     return done(response(200));
