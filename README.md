@@ -24,6 +24,7 @@ $ npm run pack:mas     # 各平台的打包命令请查看 package.json 文件
 
 ![snapshots](http://wx3.sinaimg.cn/mw1024/a5bab661ly1fgv02bhb4fj218g0xcdp9.jpg)
 
+## 扩展
 - [x] 新增、编辑、删除文章
 - [x] 搜索文章
 - [x] 软件偏好设置
