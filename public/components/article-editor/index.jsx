@@ -38,6 +38,7 @@ class ArticleEditor extends React.Component {
       this._editor = editormd('editormd', {
         emoji: true,
         path: '../lib/',
+        taskList: true,
         autoFocus: false,
         searchReplace: false,
         autoLoadModules: false,

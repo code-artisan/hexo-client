@@ -9,7 +9,7 @@ let Hexo = {
    * @return {Object}
    */
   json(article) {
-    let temp = article.replace('---\n', '').split('---'),
+    let temp = article.split('---\n').slice(1),
         meta = temp.shift().split('\n'),
         body = temp.pop().replace(/^(\n)*/, '').trim(),
         result = {};

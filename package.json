@@ -26,13 +26,17 @@
     "pack:mas": "npm run prepack && build --mac",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code-artisan/hexo-client.git"
+  },
   "keywords": [
     "hexo",
     "hexo-client",
     "electron"
   ],
   "author": "artisan",
-  "license": "GPL",
+  "license": "GPL-3.0",
   "dependencies": {
     "codemirror": "^5.26.0",
     "editor.md": "^1.5.0",
