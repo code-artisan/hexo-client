@@ -1,17 +1,13 @@
 var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
   module: {
     loaders: [
       {
-        test: /\.(jsx|es6)$/,
-        exclude: /node_modules/,
+        test: /\.(js|jsx|es6)$/,
+        exclude: /node_modules\/(?!(fs-jetpack))/,
         loader: 'babel-loader'
-      },
-      {
-        test: /\.js$/,
-        include: /node_modules\/(JSONStream|npm|rc)/,
-        loader: 'shebang-loader'
       },
       {
         test: /\.(html|cs)$/,

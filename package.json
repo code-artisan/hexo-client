@@ -17,9 +17,9 @@
     ]
   },
   "scripts": {
-    "start": "webpack --env development -w --config webpack/webpack.config.js",
-    "client": "cross-env NODE_ENV=development electron .",
-    "prepack": "webpack --env production --config webpack/webpack.config.js",
+    "start": "./node_modules/.bin/webpack --env development -w --config webpack/webpack.config.js",
+    "client": "./node_modules/.bin/cross-env NODE_ENV=development ./node_modules/.bin/electron .",
+    "prepack": "./node_modules/.bin/webpack --env production --config webpack/webpack.config.js",
     "pack": "npm run prepack && build",
     "pack:win": "npm run prepack && build --w",
     "pack:linux": "npm run prepack && build --linux",
