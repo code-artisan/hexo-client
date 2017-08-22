@@ -5,8 +5,7 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.(js|jsx|es6)$/,
-        exclude: /node_modules\/(?!(fs-jetpack))/,
+        test: /\.(jsx|es6)$/,
         loader: 'babel-loader'
       },
       {
