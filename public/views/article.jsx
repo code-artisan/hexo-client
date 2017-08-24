@@ -102,6 +102,10 @@ class ArticleView extends React.Component {
     this.handleFetchArticle(nextProps.params);
   }
 
+  handleRemoveArticle() {
+    $(window).trigger('article:remove', this.props.params.filename);
+  }
+
   render() {
     let { date } = this.state.article;
 
@@ -112,6 +116,7 @@ class ArticleView extends React.Component {
 
           <div className="flex-row m-t-15 flex-items-middle">
             <Button type="primary" onClick={ this.handleSaveArticle.bind(this) }>保存</Button>
+            { this.props.params.filename ? <Button type="danger" onClick={ this.handleRemoveArticle.bind(this) }>删除文章</Button> : null }
             <a className="el-button el-button--danger" href="#/">取消</a>
             {
               date ? ( <span className="article-date">撰写于：{ date }</span> ) : null
