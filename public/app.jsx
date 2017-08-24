@@ -31,11 +31,13 @@ class App extends React.Component {
 
     this._url = null;
 
-    this.fetch();
+    this._fetch();
 
-    this.getBlogURL();
+    this._getBlogURL();
 
-    $(window).on('refresh', this.fetch.bind(this));
+    $(window)
+      .on('refresh', this._fetch.bind(this))
+      .on('article:remove', this._removeArticle.bind(this));
   }
 
   normalize() {
@@ -44,7 +46,7 @@ class App extends React.Component {
     });
   }
 
-  fetch() {
+  _fetch() {
     execute({
       $type: 'article.list'
     })
@@ -60,15 +62,15 @@ class App extends React.Component {
     });
   }
 
-  refresh() {
+  _refresh() {
     this.setState({
       loading: true
     });
 
-    setTimeout(this.fetch.bind(this), 200);
+    setTimeout(this._fetch.bind(this), 200);
   }
 
-  getBlogURL() {
+  _getBlogURL() {
     execute({
       $type: 'setting.get',
       field: 'url'
@@ -121,7 +123,14 @@ class App extends React.Component {
     shell.openExternal(this._url);
   }
 
-  handleRemoveArticle(filename) {
+  /**
+   * 删除文章.
+   *
+   * @param  {Object} event
+   * @param  {String} filename
+   * @return {Undefined}
+   */
+  _removeArticle(event, filename) {
     if (confirm(`确定要删除 ${ filename } 这篇文章？`)) {
       execute({
         $type: 'article.remove',
@@ -133,7 +142,7 @@ class App extends React.Component {
             body: `文章：${ filename } 已被删除`
           });
 
-          this.refresh();
+          this._refresh();
 
           this.props.router.replace({
             pathname: '/'
@@ -141,10 +150,13 @@ class App extends React.Component {
         }
       });
     }
-
   }
 
-  registryContextMenu() {
+  handleRemoveArticle(filename) {
+    $(window).trigger('article:remove', filename);
+  }
+
+  _registryContextMenu() {
     menu.append(new MenuItem({
       label: '编辑文章',
       click: () => {
@@ -169,7 +181,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.registryContextMenu();
+    this._registryContextMenu();
 
     let node = ReactDOM.findDOMNode(this.refs.menu);
 
@@ -250,7 +262,7 @@ class App extends React.Component {
             <a href="javascript:;" className="tool-item" onClick={ this.handlePublishBlog.bind(this) } title="编译发布">
               <i className="icon icon-upload" />
             </a>
-            <a href="javascript:;" className="tool-item" onClick={ this.refresh.bind(this) } title="刷新列表">
+            <a href="javascript:;" className="tool-item" onClick={ this._refresh.bind(this) } title="刷新列表">
               <i className="icon icon-refresh" />
             </a>
             <Link to="/article" className="tool-item" title="撰写文章">
