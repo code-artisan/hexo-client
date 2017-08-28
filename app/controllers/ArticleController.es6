@@ -7,8 +7,10 @@ import { getPrefix } from '../../lib/utilities.es6';
 import { json, markdown } from '../../lib/hexo.es6';
 import logger from '../../lib/logger.es6';
 
-function getFullpath(filename) {
-  return path.join(getPrefix(), 'source', '_posts', `${filename}.md`);
+function getFullpath(filename, draft) {
+  let dirname = draft === true ? '_drafts' : '_posts';
+
+  return path.join(getPrefix(), 'source', dirname, `${filename}.md`);
 }
 
 module.exports = {
@@ -18,12 +20,12 @@ module.exports = {
    * @param {String} filename
    * @return {Object}
    */
-  '$article.find': function (done, {filename}) {
+  '$article.find': function (done, {filename, draft}) {
     if ( ! _.isString(filename) ) {
       return done(response(400, '文件路径不能为空'));
     }
 
-    let filepath = getFullpath(filename);
+    let filepath = getFullpath(filename, draft);
 
     if ( fs.exists(filepath) !== 'file' ) {
       return done(response(404, '文章不存在'));
@@ -47,16 +49,17 @@ module.exports = {
    * @param  {Object}   article
    * @return {Object}
    */
-  '$article.save': function (done, {article, filename}) {
+  '$article.save': function (done, {article, filename, draft}) {
     if ( ! _.isString(filename) ) {
       return done(response(400, '文件路径不能为空'));
     }
 
-    let filepath = getFullpath(filename),
-        content  = markdown(article);
+    let filepath = getFullpath(filename, draft),
+        task = fs.exists(filepath) === 'file' ?
+          fs.moveAsync( filepath, getFullpath(filename)) :
+          fs.writeAsync(filepath, markdown(article));
 
-    fs
-      .writeAsync(filepath, content)
+    task
       .then(function () {
         return done(response());
       })
@@ -73,11 +76,12 @@ module.exports = {
    */
   '$article.list': function (done) {
     try {
-      let prefix = path.join(getPrefix(), 'source', '_posts');
+      let prefix = path.join(getPrefix(), 'source');
 
-      glob(`${ prefix }/**.md`, function (error, data) {
+      glob(`${ prefix }/*(_drafts|_posts)/**.md`, function (error, data) {
         let articles = _.map(data, function (item) {
           return {
+            draft: item.indexOf('_drafts') !== -1,
             title: item.replace(/\.md/, '').split('/').pop()
           };
         });
@@ -96,8 +100,8 @@ module.exports = {
    * @param  {String}   filename
    * @return {Object}
    */
-  '$article.remove': function (done, {filename}) {
-    let filepath = getFullpath(filename);
+  '$article.remove': function (done, {filename, draft}) {
+    let filepath = getFullpath(filename, draft);
 
     fs
       .removeAsync(filepath)

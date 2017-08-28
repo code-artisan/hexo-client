@@ -36,7 +36,8 @@ class ArticleView extends React.Component {
 
       execute({
         $type: 'article.find',
-        filename
+        filename,
+        draft: Boolean(+this.props.params.draft)
       })
       .then(({result, code}) => {
         if ( code === 200 ) {
@@ -51,7 +52,7 @@ class ArticleView extends React.Component {
     }
   }
 
-  handleSaveArticle() {
+  handleSaveArticle(draft) {
     let article = {
           ...this.refs.$edtior.state.article,
           body: this.refs.$edtior.refs.body.value
@@ -67,6 +68,7 @@ class ArticleView extends React.Component {
 
     execute({
       $type: 'article.save',
+      draft: draft || Boolean(+this.props.params.draft),
       article,
       filename
     })
@@ -103,11 +105,12 @@ class ArticleView extends React.Component {
   }
 
   handleRemoveArticle() {
-    $(window).trigger('article:remove', this.props.params.filename);
+    $(window).trigger('article:remove', this.props.params);
   }
 
   render() {
-    let { date } = this.state.article;
+    let { date } = this.state.article,
+        { filename, draft } = this.props.params;
 
     return (
       <div className="flex-col-1 article-editor">
@@ -115,8 +118,9 @@ class ArticleView extends React.Component {
           <ArticleEditor ref="$edtior" article={ this.state.article } />
 
           <div className="flex-row m-t-15 flex-items-middle">
-            <Button type="primary" onClick={ this.handleSaveArticle.bind(this) }>保存</Button>
-            { this.props.params.filename ? <Button type="danger" onClick={ this.handleRemoveArticle.bind(this) }>删除文章</Button> : null }
+            <Button type="primary" onClick={ this.handleSaveArticle.bind(this, false) }>保存</Button>
+            <Button type="warning" onClick={ this.handleSaveArticle.bind(this, true) }>保存为草稿</Button>
+            <Button type="danger" onClick={ this.handleRemoveArticle.bind(this) }>删除</Button>
             <a className="el-button el-button--danger" href="#/">取消</a>
             {
               date ? ( <span className="article-date">撰写于：{ date }</span> ) : null
