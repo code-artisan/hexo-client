@@ -1,8 +1,7 @@
 import React from 'react';
 import _ from 'underscore';
-import { shell } from 'electron';
 import { Input } from 'element-react';
-import { ipcRenderer as ipc } from 'electron';
+import { ipcRenderer as ipc, shell } from 'electron';
 
 import './index.scss';
 import 'codemirror/lib/codemirror.css';
@@ -25,10 +24,20 @@ class ArticleEditor extends React.Component {
     this._shouldUpdateEditor = true;
 
     this._editor = null;
+
+    this._delegateLinkClick = this._delegateLinkClick.bind(this);
   }
 
   componentDidMount() {
     this.handleMountEditor();
+
+    $(this.refs.editor).on('click', 'a', this._delegateLinkClick);
+  }
+
+  _delegateLinkClick(event) {
+    event.preventDefault();
+
+    shell.openExternal(event.target.href);
   }
 
   handleMountEditor() {
@@ -92,6 +101,8 @@ class ArticleEditor extends React.Component {
 
   componentWillUnmount() {
     this._editor = null;
+
+    $(this.refs.editor).off('click', 'a', this._delegateLinkClick);
   }
 
   handleChange(field, value) {
