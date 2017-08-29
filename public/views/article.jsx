@@ -52,7 +52,7 @@ class ArticleView extends React.Component {
     }
   }
 
-  handleSaveArticle(draft) {
+  handleSaveArticle(draft = Boolean(+this.props.params.draft)) {
     let article = {
           ...this.refs.$edtior.state.article,
           body: this.refs.$edtior.refs.body.value
@@ -68,7 +68,8 @@ class ArticleView extends React.Component {
 
     execute({
       $type: 'article.save',
-      draft: draft || Boolean(+this.props.params.draft),
+      draft: draft,
+      prevState: Boolean(+this.props.params.draft),
       article,
       filename
     })

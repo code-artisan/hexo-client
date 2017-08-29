@@ -49,17 +49,21 @@ module.exports = {
    * @param  {Object}   article
    * @return {Object}
    */
-  '$article.save': function (done, {article, filename, draft}) {
+  '$article.save': function (done, {article, filename, draft, prevState}) {
     if ( ! _.isString(filename) ) {
       return done(response(400, '文件路径不能为空'));
     }
 
-    let filepath = getFullpath(filename, draft),
-        task = fs.exists(filepath) === 'file' ?
-          fs.moveAsync( filepath, getFullpath(filename)) :
-          fs.writeAsync(filepath, markdown(article));
+    let filepath = getFullpath(filename, prevState);
 
-    task
+    fs.writeAsync(filepath, markdown(article))
+      .then(function () {
+        let newPath = getFullpath(filename, draft);
+
+        if (newPath !== filepath) {
+          return fs.moveAsync(filepath, newPath);
+        }
+      })
       .then(function () {
         return done(response());
       })

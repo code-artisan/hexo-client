@@ -70,7 +70,7 @@
             "h1", "h2", "h3", "h4", "h5", "h6", "|",
             "list-ul", "list-ol", "hr", "|",
             "code", "datetime", "pagebreak", "|",
-            "watch", "preview", "fullscreen", "clear", "|",
+            "watch", "preview", "fullscreen", "clear", "spacing", "|",
             "docs"
         ],
         simple : [

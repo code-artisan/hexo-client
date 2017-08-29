@@ -153,8 +153,8 @@ class App extends React.Component {
     }
   }
 
-  handleRemoveArticle(filename) {
-    $(window).trigger('article:remove', filename);
+  handleRemoveArticle(filename, draft) {
+    $(window).trigger('article:remove', {filename, draft});
   }
 
   _registryContextMenu() {
@@ -174,9 +174,11 @@ class App extends React.Component {
     menu.append(new MenuItem({
       label: '删除文章',
       click: () => {
-        let pathname = this.pathname.split('/').pop();
+        let params = this.pathname.split('/'),
+            draft = params.pop(),
+            pathname = params.pop();
 
-        this.handleRemoveArticle( pathname );
+        this.handleRemoveArticle( pathname, draft );
       }
     }));
   }

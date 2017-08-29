@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'underscore';
 import { Input } from 'element-react';
+import pangu from 'pangu';
 import { ipcRenderer as ipc, shell } from 'electron';
 
 import './index.scss';
@@ -41,28 +42,46 @@ class ArticleEditor extends React.Component {
   }
 
   handleMountEditor() {
-    let { article } = this.state;
+    let editor = null,
+        { article } = this.state,
+        textarea = this.refs.body;
 
     if ( _.has(article, 'body') ) {
-      this._editor = editormd('editormd', {
+      this._editor = editor = editormd('editormd', {
         emoji: true,
         path: '../lib/',
+        value: article.body,
         taskList: true,
         autoFocus: false,
         searchReplace: false,
         autoLoadModules: false,
         saveHTMLToTextarea: true,
         toolbarIconsClass: {
-          docs: 'fa-file'
+          docs: 'fa-file',
+          spacing: 'fa-paragraph'
         },
         lang: {
           toolbar: {
-            docs: '关于编辑器'
+            docs: '关于编辑器',
+            spacing: '中英文之间插入空格'
           }
         },
         toolbarHandlers: {
           docs: function () {
             return shell.openExternal('https://pandao.github.io/editor.md/index.html');
+          },
+          spacing: () => {
+            let body = pangu.spacing(editor.getValue()),
+                { article } = this.state;
+
+            this.setState({
+              article: {
+                ...article,
+                body
+              }
+            });
+
+            editor.setValue(body);
           }
         },
         onload: function () {
@@ -74,6 +93,8 @@ class ArticleEditor extends React.Component {
           article.body = this.getValue();
         }
       });
+
+      editor.setValue(article.body);
     }
   }
 
@@ -100,6 +121,7 @@ class ArticleEditor extends React.Component {
   }
 
   componentWillUnmount() {
+    this._editor.clear();
     this._editor = null;
 
     $(this.refs.editor).off('click', 'a', this._delegateLinkClick);
