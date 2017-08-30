@@ -38,7 +38,7 @@ let Hexo = {
    * @return {String}
    */
   markdown(article) {
-    return `---\ntitle: ${ (article.title || '').trim() }\ndate: ${ (article.date || '').trim() }\ntags: [${ (article.tags || '').trim() }]\n---\n\n${ (article.body || '').trim() }`;
+    return `---\ntitle: ${ (article.title || '').trim() }\ndate: ${ (article.date || '').trim() }\ntags: ${ JSON.stringify(article.tags || []).replace(/[\"|\']/g, '') }\n---\n\n${ (article.body || '').trim() }`;
   }
 };
 

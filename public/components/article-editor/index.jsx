@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'underscore';
-import { Input } from 'element-react';
+import { Input, Tag } from 'element-react';
 import { ipcRenderer as ipc, shell } from 'electron';
 
 import './index.scss';
@@ -116,14 +116,44 @@ class ArticleEditor extends React.Component {
     });
   }
 
+  handleInputTag({target, keyCode}) {
+    let { article } = this.state,
+        tag = target.value.trim();
+
+    if (keyCode === 13) {
+      if (article.tags.indexOf(tag) === -1) {
+        article.tags.push(tag);
+
+        target.value = '';
+        this.setState({ article });
+      } else {
+        alert('不能重复添加关键词');
+      }
+    }
+  }
+
+  handleRemoveTag(index) {
+    let { article } = this.state;
+
+    article.tags.splice(index, 1);
+
+    this.setState({ article });
+  }
+
   render() {
     let { article } = this.state;
 
     return (
       <div className="flex-col-1">
         <Input placeholder="请输入文章标题" prepend="标&#x3000;题" value={ article.title } onChange={ this.handleChange.bind(this, 'title') } />
-        <Input placeholder="请输入关键词，多个请用英文逗号 ',' 隔开" prepend="关键词" value={ article.tags } onChange={ this.handleChange.bind(this, 'tags') } />
-
+        <Input placeholder="请输入关键词，多个请用英文逗号 ',' 隔开" prepend="关键词" onKeyUp={ this.handleInputTag.bind(this) } />
+        <div className="el-input el-input-tags">
+          {
+            article.tags.map((tag, index) => {
+              return <Tag key={ Math.random() } closeTransition={ false } type="primary" closable onClose={this.handleRemoveTag.bind(this, index)}>{ tag }</Tag>;
+            })
+          }
+        </div>
         <div ref="editor" id="editormd" className="pure-u-1 el-input">
           <textarea ref="body" className="d-hide" value={ article.body || '' } onChange={ () => {} } />
         </div>
