@@ -1,7 +1,13 @@
 .article-editor {
   padding: 20px; }
+  .article-editor .el-tag {
+    margin-top: 5px;
+    margin-right: 10px; }
   .article-editor .el-textarea {
     margin: 15px 0; }
+  .article-editor .el-input-tags {
+    margin-top: -10px;
+    margin-bottom: 15px; }
   .article-editor .el-input-group {
     margin-bottom: 15px; }
   .article-editor .el-textarea__inner {
