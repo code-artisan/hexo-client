@@ -3,7 +3,4 @@ index.js
 npm-debug.log
 node_modules
 hexo-client*
-dist/**.zip
-dist/**.dmg
-dist/**.app
-dist/*
+dist
