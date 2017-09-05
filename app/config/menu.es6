@@ -4,6 +4,7 @@ import { app, shell, BrowserWindow } from 'electron';
 import { ASSETS_PATH } from './global.es6';
 import setting from '../../lib/setting.es6';
 import about from '../../lib/about.es6';
+import updater from '../../lib/updater.es6';
 
 module.exports = [
   {
@@ -12,6 +13,9 @@ module.exports = [
       {
         label: `关于 Hexo 客户端`,
         click: about
+      }, {
+        label: `检查更新`,
+        click: updater
       }, {
         type: 'separator'
       }, {
