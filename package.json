@@ -7,14 +7,16 @@
   "build": {
     "appId": "name.codeartisan.hexo",
     "copyright": "Copyright © 2017 Artisan.",
-    "productName": "Hexo 客户端",
     "files": [
       "./app",
       "./index.js",
       "./renderer.js",
       "./style.css",
       "./public"
-    ]
+    ],
+    "publish": {
+      "provider": "github"
+    }
   },
   "scripts": {
     "start": "./node_modules/.bin/webpack --env development -w --config webpack/webpack.config.js",
