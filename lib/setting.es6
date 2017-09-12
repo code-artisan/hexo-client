@@ -4,7 +4,7 @@ import { app, BrowserWindow } from 'electron';
 import { ASSETS_PATH } from '../app/config/global.es6';
 
 module.exports = function () {
-  const isDevelopment = process.env.NODE_ENV;
+  const isDevelopment = process.env.NODE_ENV === 'development';
 
   let file = url.format({
         pathname: path.join(ASSETS_PATH, 'index.html'),
@@ -14,8 +14,8 @@ module.exports = function () {
       });
 
   let window = new BrowserWindow({
-        width: 400,
-        height: 200,
+        width: 450,
+        height: 280,
         resizable: ! isDevelopment,
         darkTheme: true,
         minimizable: false,

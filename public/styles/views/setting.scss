@@ -35,11 +35,25 @@
     }
   }
 
+  .el-input-number {
+    width: 100%;
+    display: block;
+    position: relative;
+
+    &:after {
+      content: '分钟';
+      position: absolute;
+      top: 6px;
+      left: 22px;
+      font-size: 12px;
+    }
+  }
+
   .el-form-item__label {
     padding: 8px 12px 8px 0;
   }
 
   .el-form-item__content {
-    line-height: 1;
+    line-height: 30px;
   }
 }

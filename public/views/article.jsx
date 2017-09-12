@@ -20,14 +20,48 @@ class ArticleView extends React.Component {
       article,
       loading: false
     };
+
+    this._interval = 0;
   }
 
   normalize(loading = false) {
     this.setState({ loading });
   }
 
+  _autoSaveRunner() {
+    this._timer = setTimeout(() => {
+      if ( this._timer ) { // 清除上一个定时器
+        clearTimeout(this._timer);
+      }
+
+      this.handleSaveArticle(true);
+
+      this._autoSaveRunner();
+    }, this._interval); // 循环执行
+  }
+
   componentDidMount() {
     this.handleFetchArticle(this.props.params);
+
+    // 自动保存
+    this
+      .fetchSetting()
+      .then(({result}) => {
+        this._interval = result.interval * 1000;
+
+        if ( result.autoSave === true && _.isNumber(result.interval) ) {
+          this._timer = setTimeout(this._autoSaveRunner.bind(this), this._interval);
+        }
+      });
+  }
+
+  fetchSetting() {
+    return (
+      execute({
+        $type: 'setting.get',
+        field: ['autoSave', 'interval']
+      })
+    );
   }
 
   handleFetchArticle({filename}) {
@@ -51,7 +85,8 @@ class ArticleView extends React.Component {
     }
   }
 
-  handleSaveArticle() {
+  handleSaveArticle(isAutoSave = false) {
+    // 文章信息处理.
     let article = {
           ...this.refs.$edtior.state.article,
           body: this.refs.$edtior.refs.body.value
@@ -61,7 +96,10 @@ class ArticleView extends React.Component {
       article.date = moment().format('YYYY-MM-DD HH:mm:ss');
     }
 
-    this.normalize(true);
+    // 自动保存不需要显示 loading.
+    if ( ! isAutoSave ) {
+      this.normalize(true);
+    }
 
     let filename = this.props.params.filename || article.title;
 
@@ -71,6 +109,8 @@ class ArticleView extends React.Component {
       filename
     })
     .then(({code}) => {
+      if ( isAutoSave ) return; // 自动保存不需要消息提示，防止干扰用户写作.
+
       this.normalize();
 
       if ( code === 200 ) {
@@ -90,6 +130,8 @@ class ArticleView extends React.Component {
       }
     })
     .catch((e) => {
+      if ( isAutoSave ) return;
+
       notify('保存文章提示', {
         body: `文章：${ filename } 保存失败`
       });
@@ -104,6 +146,10 @@ class ArticleView extends React.Component {
 
   handleRemoveArticle() {
     $(window).trigger('article:remove', this.props.params.filename);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this._timer);
   }
 
   render() {
