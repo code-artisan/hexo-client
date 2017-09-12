@@ -46,11 +46,10 @@ class ArticleView extends React.Component {
     // 自动保存
     this
       .fetchSetting()
-      .then(({result}) => {
-        this._interval = result.interval;
-
+      .then(({ result }) => {
         if ( result.autoSave === true && _.isNumber(result.interval) ) {
-          this._timer = setTimeout(this._autoSaveRunner.bind(this), this._interval);
+          this._interval  = result.interval;
+          this._timer     = setTimeout(this._autoSaveRunner.bind(this), this._interval); // 触发自动更新运行程序
         }
       });
   }
