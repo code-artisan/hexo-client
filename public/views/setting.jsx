@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import React from 'react';
-import { Form, Input, Button, Tabs, Radio, InputNumber, Switch, Select } from 'element-react';
+import { Form, Input, Button, Tabs, Radio, InputNumber, Switch } from 'element-react';
 
 import execute from '../utilities/socket.es6';
 
@@ -39,15 +39,11 @@ class Setting extends React.Component {
     });
   }
 
-  handleSetBlogURL(url) {
-    this.setState({ url });
-  }
-
-  handleSetAutoSaveState(autoSave) {
-    this.setState({ autoSave });
-  }
-
   handleChangeSettings(field, value) {
+    if (field === 'interval') {
+      value = value * 1000 * 60;
+    }
+
     this.setState({
       [field]: value
     });

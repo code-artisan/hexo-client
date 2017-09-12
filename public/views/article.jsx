@@ -41,13 +41,13 @@ class ArticleView extends React.Component {
   }
 
   componentDidMount() {
-    this.handleFetchArticle(this.props.params);
+    this.handleFetchArticle(this.props.params); // 查询文章信息
 
     // 自动保存
     this
       .fetchSetting()
       .then(({result}) => {
-        this._interval = result.interval * 1000;
+        this._interval = result.interval;
 
         if ( result.autoSave === true && _.isNumber(result.interval) ) {
           this._timer = setTimeout(this._autoSaveRunner.bind(this), this._interval);
