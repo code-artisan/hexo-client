@@ -18,7 +18,8 @@
   /* Set height, width, borders, and global font properties here */
   font-family: monospace;
   height: 300px;
-  color: black; }
+  color: black;
+  direction: ltr; }
 
 /* PADDING */
 .CodeMirror-lines {
@@ -403,8 +404,8 @@ div.CodeMirror-dragcursors {
   background: #d7d4f0; }
 
 .cm-searching {
-  background: #ffa;
-  background: rgba(255, 255, 0, 0.4); }
+  background-color: #ffa;
+  background-color: rgba(255, 255, 0, 0.4); }
 
 /* Used to force a border model for a node */
 .cm-force-border {
@@ -446,6 +447,13 @@ span.CodeMirror-selectedtext {
   content: "";
   height: 100%;
   vertical-align: middle; }
+
+.el-dialog__header:after, .el-dialog__header:before {
+  display: table;
+  content: ""; }
+
+.el-dialog__header:after {
+  clear: both; }
 
 @font-face {
   font-family: element-icons;
@@ -704,7 +712,8 @@ span.CodeMirror-selectedtext {
   text-align: center;
   margin: 0 6px;
   box-sizing: border-box;
-  transition: border .3s; }
+  transition: border .3s;
+  -moz-appearance: textfield; }
 
 .el-pager, .el-pager li {
   vertical-align: top;
@@ -818,7 +827,8 @@ span.CodeMirror-selectedtext {
   border: none;
   outline: 0;
   padding: 0;
-  cursor: pointer; }
+  cursor: pointer;
+  font-size: 16px; }
 
 .el-dialog__headerbtn .el-dialog__close {
   color: #bfcbd9; }
@@ -1094,12 +1104,11 @@ span.CodeMirror-selectedtext {
 .el-menu--collapse {
   width: 64px; }
 
-.el-menu--collapse > .el-menu-item, .el-menu--collapse > .el-submenu > .el-submenu__title {
-  text-align: center; }
-
 .el-menu--collapse > .el-menu-item [class^=el-icon-], .el-menu--collapse > .el-submenu > .el-submenu__title [class^=el-icon-] {
   margin: 0;
-  vertical-align: middle; }
+  vertical-align: middle;
+  width: 24px;
+  text-align: center; }
 
 .el-menu--collapse > .el-menu-item .el-submenu__icon-arrow, .el-menu--collapse > .el-submenu > .el-submenu__title .el-submenu__icon-arrow {
   display: none; }
@@ -1126,8 +1135,12 @@ span.CodeMirror-selectedtext {
   transform: none; }
 
 .el-menu-item [class^=el-icon-] {
-  vertical-align: baseline;
-  margin-right: 10px; }
+  margin-right: 5px;
+  width: 24px;
+  text-align: center; }
+
+.el-menu-item * {
+  vertical-align: middle; }
 
 .el-menu-item:first-child {
   margin-left: 0; }
@@ -1136,8 +1149,10 @@ span.CodeMirror-selectedtext {
   margin-right: 0; }
 
 .el-submenu [class^=el-icon-] {
-  vertical-align: baseline;
-  margin-right: 10px; }
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 24px;
+  text-align: center; }
 
 .el-submenu .el-menu {
   background-color: #e4e8f1; }
@@ -1160,6 +1175,9 @@ span.CodeMirror-selectedtext {
 
 .el-submenu__title {
   position: relative; }
+
+.el-submenu__title * {
+  vertical-align: middle; }
 
 .el-submenu__icon-arrow {
   position: absolute;
@@ -1186,6 +1204,10 @@ span.CodeMirror-selectedtext {
 .el-radio-button__inner, .el-radio-group, .el-radio__input {
   line-height: 1;
   vertical-align: middle; }
+
+.horizontal-collapse-transition .el-submenu__title .el-submenu__icon-arrow {
+  transition: .2s;
+  opacity: 0; }
 
 .el-radio {
   color: #1f2d3d;
@@ -1802,7 +1824,7 @@ span.CodeMirror-selectedtext {
   word-break: break-all;
   line-height: 24px; }
 
-.el-badge__content, .el-message__group p, .el-steps.is-horizontal, .el-tabs__nav, .el-tag, .el-time-spinner, .el-tree-node, .el-upload-cover__title {
+.el-badge__content, .el-message__group p, .el-progress-bar__inner, .el-steps.is-horizontal, .el-tabs__nav, .el-tag, .el-time-spinner, .el-tree-node, .el-upload-list__item-name {
   white-space: nowrap; }
 
 .el-table tr input[type=checkbox] {
@@ -3579,7 +3601,8 @@ span.CodeMirror-selectedtext {
 .el-input-number {
   display: inline-block;
   width: 180px;
-  position: relative; }
+  position: relative;
+  line-height: normal; }
 
 .el-input-number .el-input {
   display: block; }
@@ -5525,8 +5548,7 @@ span.CodeMirror-selectedtext {
   overflow: hidden;
   padding-left: 4px;
   text-overflow: ellipsis;
-  transition: color .3s;
-  white-space: nowrap; }
+  transition: color .3s; }
 
 .el-upload-list__item-name [class^=el-icon] {
   color: #97a8be;
@@ -5831,6 +5853,7 @@ span.CodeMirror-selectedtext {
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   font-weight: 400;
   text-align: left;
   padding: 0 10px;
@@ -6438,6 +6461,9 @@ span.CodeMirror-selectedtext {
   opacity: 0;
   transition: opacity 120ms ease-out; }
 
+.el-carousel__item--card, .el-carousel__item.is-animating {
+  transition: transform .4s ease-in-out; }
+
 .el-scrollbar__bar.is-horizontal {
   height: 6px;
   left: 2px; }
@@ -6459,7 +6485,6 @@ span.CodeMirror-selectedtext {
   width: 100%;
   height: 100%;
   display: inline-block;
-  transition: .4s ease-in-out;
   overflow: hidden;
   z-index: 0; }
 
