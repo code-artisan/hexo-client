@@ -145,8 +145,8 @@ class ArticleEditor extends React.Component {
 
     return (
       <div className="flex-col-1">
-        <Input placeholder="请输入文章标题" prepend="标&#x3000;题" value={ article.title } onChange={ this.handleChange.bind(this, 'title') } />
-        <Input placeholder="请输入关键词，多个请用英文逗号 ',' 隔开" prepend="关键词" onKeyUp={ this.handleInputTag.bind(this) } />
+        <Input placeholder="请输入标题" prepend="标&#x3000;题" value={ article.title } onChange={ this.handleChange.bind(this, 'title') } />
+        <Input placeholder="请输入关键词" prepend="关键词" onKeyUp={ this.handleInputTag.bind(this) } />
         <div className="el-input el-input-tags">
           {
             article.tags.map((tag, index) => {
