@@ -19,7 +19,7 @@ const routes = (
   <Router history={ hashHistory }>
     <Route path="/" component={ App }>
       <IndexRoute component={ IndexView } />
-      <Route path="article(/:filename)" component={ ArticleView } />
+      <Route path="article(/:filename/:draft)" component={ ArticleView } />
     </Route>
     <Route path="/about" component={ AboutView } />
     <Route path="/setting" component={ SettingView } />
