@@ -3,9 +3,8 @@ import _ from 'underscore';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router';
-import { ipcRenderer as ipc, remote } from 'electron';
-import { Button, Input, Menu as Sidebar, Icon, Loading } from 'element-react';
-import { shell } from 'electron';
+import { ipcRenderer as ipc, remote, shell } from 'electron';
+import { Button, Input, Menu as Sidebar, Icon, Loading, Tooltip } from 'element-react';
 import execute from './utilities/socket.es6';
 import notify from './lib/notify.es6';
 
@@ -128,12 +127,14 @@ class App extends React.Component {
    *
    * @param  {Object} event
    * @param  {String} filename
+   * @param  {Boolean} draft
    * @return {Undefined}
    */
-  _removeArticle(event, filename) {
+  _removeArticle(event, {filename, draft}) {
     if (confirm(`确定要删除 ${ filename } 这篇文章？`)) {
       execute({
         $type: 'article.remove',
+        draft: draft === '1',
         filename
       })
       .then((res) => {
@@ -152,8 +153,8 @@ class App extends React.Component {
     }
   }
 
-  handleRemoveArticle(filename) {
-    $(window).trigger('article:remove', filename);
+  handleRemoveArticle(filename, draft) {
+    $(window).trigger('article:remove', {filename, draft});
   }
 
   _registryContextMenu() {
@@ -173,9 +174,11 @@ class App extends React.Component {
     menu.append(new MenuItem({
       label: '删除文章',
       click: () => {
-        let pathname = this.pathname.split('/').pop();
+        let params = this.pathname.split('/'),
+            draft = params.pop(),
+            pathname = params.pop();
 
-        this.handleRemoveArticle( pathname );
+        this.handleRemoveArticle( pathname, draft );
       }
     }));
   }
@@ -201,7 +204,7 @@ class App extends React.Component {
       if (this.state.keywords.length === 0) {
         return (
           <li className="el-menu-msgs">暂无文章 &nbsp;
-            <Link to="/article" className="tool-item" title="撰写文章">
+            <Link to="/article/0" className="tool-item" title="撰写文章">
               <i className="icon icon-plus" />
             </Link>
           </li>
@@ -211,16 +214,20 @@ class App extends React.Component {
       return (<li className="el-menu-msgs">没有匹配的文章</li>);
     }
 
-    return resource.map(({title}, index) => {
+    return resource.map(({title, draft}, index) => {
+      draft = + draft;
+
       return (
         <li key={ index }>
-          <Link
-            className="el-menu-item"
-            activeClassName="is-active"
-            to={`/article/${ title }`}
-          >
-            <i className="icon icon-article"></i> { title }
-          </Link>
+          <Tooltip effect="dark" content={ title } placement="right">
+            <Link
+              className="el-menu-item"
+              activeClassName="is-active"
+              to={`/article/${ title }/${ draft }`}
+            >
+              { draft === 1 ? <i className="icon icon-draft"></i> : <i className="icon icon-article"></i> } { title }
+            </Link>
+          </Tooltip>
         </li>
       );
     });

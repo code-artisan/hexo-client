@@ -8467,6 +8467,8 @@ textarea {
     border-bottom: 1px #48576a solid; }
   .sidebar .is-active {
     background-color: #48576a; }
+  .sidebar .icon-draft {
+    color: #ff4949; }
   .sidebar .el-menu-item {
     display: block;
     width: 100%;
@@ -12195,9 +12197,9 @@ hr.editormd-page-break {
 
 @font-face {
   font-family: "iconfont";
-  src: url(./public/assets/fonts/iconfont-8398d02fbd60d02d4217042e8b252b68.eot);
+  src: url(./public/assets/fonts/iconfont-0b06f11b8d30d7515a7c63a70d840030.eot);
   /* IE9*/
-  src: url(./public/assets/fonts/iconfont-8398d02fbd60d02d4217042e8b252b68.eot#iefix) format("embedded-opentype"), url(./public/assets/fonts/iconfont-afdb9c2c8165e78623528d0613f7312d.woff) format("woff"), url(./public/assets/fonts/iconfont-495ee56502ef34868525f348adce3a3e.ttf) format("truetype"), url(./public/assets/fonts/iconfont-b4cbf39ce3b0ef110e4f77932da57142.svg#iconfont) format("svg");
+  src: url(./public/assets/fonts/iconfont-0b06f11b8d30d7515a7c63a70d840030.eot#iefix) format("embedded-opentype"), url(./public/assets/fonts/iconfont-496cc2dff7990fca378bfe4081759859.woff) format("woff"), url(./public/assets/fonts/iconfont-c4572077557da635a18cbd7210da3b2b.ttf) format("truetype"), url(./public/assets/fonts/iconfont-4231ef03dada3143f9b1bf0e59b62f0d.svg#iconfont) format("svg");
   /* iOS 4.1- */ }
 
 .icon,
@@ -12235,6 +12237,9 @@ hr.editormd-page-break {
 
 .icon-article:before {
   content: "\E614"; }
+
+.icon-draft:before {
+  content: "\E95D"; }
 
 .scroll-y {
   overflow-y: auto; }
@@ -12306,7 +12311,17 @@ hr.editormd-page-break {
     margin-bottom: 15px; }
   .setting-container .el-input__inner:focus, .setting-container .el-input__inner:hover {
     border-color: #bfcbd9; }
+  .setting-container .el-input-number {
+    width: 100%;
+    display: block;
+    position: relative; }
+    .setting-container .el-input-number:after {
+      content: '\5206\949F';
+      position: absolute;
+      top: 6px;
+      left: 22px;
+      font-size: 12px; }
   .setting-container .el-form-item__label {
     padding: 8px 12px 8px 0; }
   .setting-container .el-form-item__content {
-    line-height: 1; }
+    line-height: 30px; }
