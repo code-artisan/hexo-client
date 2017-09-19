@@ -12311,7 +12311,17 @@ hr.editormd-page-break {
     margin-bottom: 15px; }
   .setting-container .el-input__inner:focus, .setting-container .el-input__inner:hover {
     border-color: #bfcbd9; }
+  .setting-container .el-input-number {
+    width: 100%;
+    display: block;
+    position: relative; }
+    .setting-container .el-input-number:after {
+      content: '\5206\949F';
+      position: absolute;
+      top: 6px;
+      left: 22px;
+      font-size: 12px; }
   .setting-container .el-form-item__label {
     padding: 8px 12px 8px 0; }
   .setting-container .el-form-item__content {
-    line-height: 1; }
+    line-height: 30px; }
