@@ -77,7 +77,9 @@ class ArticleView extends React.Component {
         if ( code === 200 ) {
           this.state.article = {
             ...result,
-            tags: (result.tags || '').split(',')
+            tags: (result.tags || '').split(',').filter((tag) => {
+                return tag.trim().length !== 0;
+              })
           };
         }
 
