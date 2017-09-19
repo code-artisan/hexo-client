@@ -9,7 +9,8 @@ import execute from '../utilities/socket.es6';
 import ArticleEditor from '../components/article-editor/index.jsx';
 
 const article = {
-  body: ''
+  body: '',
+  tags: []
 };
 
 class ArticleView extends React.Component {
@@ -41,7 +42,10 @@ class ArticleView extends React.Component {
       })
       .then(({result, code}) => {
         if ( code === 200 ) {
-          this.state.article = result;
+          this.state.article = {
+            ...result,
+            tags: (result.tags || '').split(',')
+          };
         }
 
         this.normalize();
