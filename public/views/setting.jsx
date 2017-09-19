@@ -20,6 +20,7 @@ class Setting extends React.Component {
       field: ['prefix', 'url', 'autoSave', 'interval']
     })
     .then(({result}) => {
+      result.interval /= 60000;
       this.setState(result);
     });
 
