@@ -71,6 +71,12 @@
 .cm-fat-cursor div.CodeMirror-cursors {
   z-index: 1; }
 
+.cm-fat-cursor-mark {
+  background-color: rgba(20, 255, 20, 0.5);
+  -webkit-animation: blink 1.06s steps(1) infinite;
+  -moz-animation: blink 1.06s steps(1) infinite;
+  animation: blink 1.06s steps(1) infinite; }
+
 .cm-animate-fat-cursor {
   width: auto;
   border: 0;
@@ -203,10 +209,10 @@
 
 /* Default styles for common addons */
 div.CodeMirror span.CodeMirror-matchingbracket {
-  color: #0f0; }
+  color: #0b0; }
 
 div.CodeMirror span.CodeMirror-nonmatchingbracket {
-  color: #f22; }
+  color: #a22; }
 
 .CodeMirror-matchingtag {
   background: rgba(255, 150, 0, 0.3); }
@@ -346,7 +352,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
 .CodeMirror-linewidget {
   position: relative;
   z-index: 2;
-  overflow: auto; }
+  padding: 0.1px;
+  /* Force widget margins to stay inside of the container */ }
 
 .CodeMirror-rtl pre {
   direction: rtl; }
@@ -427,20 +434,11 @@ span.CodeMirror-selectedtext {
   display: table;
   content: ""; }
 
+.el-breadcrumb:after, .el-button-group:after, .el-color-dropdown__main-wrapper::after, .el-dialog__header:after, .el-form-item:after, .el-form-item__content:after, .el-menu:after, .el-picker-panel__body-wrapper::after, .el-picker-panel__body::after, .el-row:after, .el-slider:after, .el-tabs {
+  clear: both; }
+
 .el-checkbox-button__original, .el-pagination--small .arrow.disabled, .el-table .hidden-columns, .el-table td.is-hidden > *, .el-table th.is-hidden > *, .el-table--hidden {
   visibility: hidden; }
-
-.el-form-item__content:after {
-  clear: both; }
-
-.el-form-item:after {
-  clear: both; }
-
-.el-breadcrumb:after {
-  clear: both; }
-
-.el-button-group:after {
-  clear: both; }
 
 .el-autocomplete-suggestion.is-loading li:after {
   display: inline-block;
@@ -452,12 +450,9 @@ span.CodeMirror-selectedtext {
   display: table;
   content: ""; }
 
-.el-dialog__header:after {
-  clear: both; }
-
 @font-face {
   font-family: element-icons;
-  src: url(./node_modules/element-theme-default/lib/fonts/element-icons-d2f69a92faa6fe990d2e613c358be705.woff) format("woff"), url(./node_modules/element-theme-default/lib/fonts/element-icons-b02bdc1b846fd65473922f5f62832108.ttf) format("truetype");
+  src: url(./node_modules/_element-theme-default@1.4.13@element-theme-default/lib/fonts/element-icons-d2f69a92faa6fe990d2e613c358be705.woff) format("woff"), url(./node_modules/_element-theme-default@1.4.13@element-theme-default/lib/fonts/element-icons-b02bdc1b846fd65473922f5f62832108.ttf) format("truetype");
   font-weight: 400;
   font-style: normal; }
 
@@ -1015,9 +1010,6 @@ span.CodeMirror-selectedtext {
   display: table;
   content: ""; }
 
-.el-menu:after {
-  clear: both; }
-
 .el-menu li {
   list-style: none; }
 
@@ -1119,6 +1111,9 @@ span.CodeMirror-selectedtext {
   overflow: hidden;
   visibility: hidden;
   display: inline-block; }
+
+.el-menu--collapse .el-menu .el-submenu {
+  min-width: 200px; }
 
 .el-menu--collapse .el-submenu {
   position: relative; }
@@ -1297,8 +1292,8 @@ span.CodeMirror-selectedtext {
   margin: 0; }
 
 .el-radio-button, .el-radio-button__inner {
-  position: relative;
-  display: inline-block; }
+  display: inline-block;
+  position: relative; }
 
 .el-radio__label {
   font-size: 14px;
@@ -1384,18 +1379,15 @@ span.CodeMirror-selectedtext {
   font-size: 12px;
   border-radius: 0; }
 
-.el-switch {
-  display: inline-block;
-  position: relative;
+.el-switch, .el-switch__label, .el-switch__label * {
   font-size: 14px;
+  display: inline-block; }
+
+.el-switch {
+  position: relative;
   line-height: 22px;
   height: 22px;
   vertical-align: middle; }
-
-.el-switch__label, .el-switch__label * {
-  position: absolute;
-  font-size: 14px;
-  display: inline-block; }
 
 .el-switch .label-fade-enter, .el-switch .label-fade-leave-active {
   opacity: 0; }
@@ -1419,12 +1411,15 @@ span.CodeMirror-selectedtext {
 
 .el-switch__label {
   transition: .2s;
+  position: absolute;
   left: 0;
-  top: 0; }
+  top: 0;
+  z-index: 2; }
 
 .el-switch__label * {
   line-height: 1;
   top: 4px;
+  position: absolute;
   color: #fff; }
 
 .el-switch__label--left i {
@@ -1436,6 +1431,19 @@ span.CodeMirror-selectedtext {
 .el-switch__input {
   display: none; }
 
+.el-switch__input.allow-focus {
+  z-index: 0;
+  display: inline;
+  display: initial;
+  position: absolute;
+  left: 0;
+  top: 0;
+  outline: 0;
+  opacity: 0; }
+
+.el-switch__input.allow-focus:focus + .el-switch__core {
+  box-shadow: 0 0 2px #20a0ff; }
+
 .el-switch__core {
   margin: 0;
   display: inline-block;
@@ -1445,7 +1453,8 @@ span.CodeMirror-selectedtext {
   border-radius: 12px;
   box-sizing: border-box;
   background: #bfcbd9;
-  transition: border-color .3s,background-color .3s; }
+  transition: border-color .3s,background-color .3s;
+  z-index: 1; }
 
 .el-switch__core .el-switch__button {
   top: 0;
@@ -1744,6 +1753,9 @@ span.CodeMirror-selectedtext {
   overflow: hidden;
   background-color: #eef1f6;
   text-align: left; }
+
+.el-table th.is-sortable {
+  cursor: pointer; }
 
 .el-table th > div {
   display: inline-block;
@@ -2335,8 +2347,7 @@ span.CodeMirror-selectedtext {
 
 .el-picker-panel__body-wrapper::after, .el-picker-panel__body::after {
   content: "";
-  display: table;
-  clear: both; }
+  display: table; }
 
 .el-picker-panel__content {
   position: relative;
@@ -2435,6 +2446,9 @@ span.CodeMirror-selectedtext {
 
 .el-date-picker.has-time {
   min-width: 324px; }
+
+.el-date-picker.has-time .el-picker-panel__body-wrapper {
+  position: relative; }
 
 .el-date-picker__editor-wrap {
   position: relative;
@@ -3802,9 +3816,6 @@ span.CodeMirror-selectedtext {
   display: inline-block;
   vertical-align: middle; }
 
-.el-slider:after {
-  clear: both; }
-
 .el-slider.is-vertical {
   position: relative; }
 
@@ -4034,9 +4045,6 @@ span.CodeMirror-selectedtext {
 
 .el-row:after, .el-row:before {
   display: table; }
-
-.el-row:after {
-  clear: both; }
 
 .el-row--flex {
   display: -ms-flexbox;
@@ -6746,7 +6754,7 @@ span.CodeMirror-selectedtext {
   background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0)); }
 
 .el-color-svpanel__black {
-  background: linear-gradient(to top, #000, transparent); }
+  background: linear-gradient(to top, #000, rgba(0, 0, 0, 0)); }
 
 .el-color-svpanel__cursor {
   position: absolute; }
@@ -6807,8 +6815,7 @@ span.CodeMirror-selectedtext {
 
 .el-color-dropdown__main-wrapper::after {
   content: "";
-  display: table;
-  clear: both; }
+  display: table; }
 
 .el-color-dropdown__btns {
   margin-top: 6px;

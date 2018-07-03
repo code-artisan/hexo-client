@@ -45,9 +45,7 @@ class Setting extends React.Component {
       value = value * 1000 * 60;
     }
 
-    this.setState({
-      [field]: value
-    });
+    this.setState({[field]: value })
   }
 
   handleSaveSetting() {

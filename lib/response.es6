@@ -5,9 +5,5 @@ module.exports = function (result = null, code = 200, message = null) {
     message = code, code = result, result = null;
   }
 
-  return {
-    code,
-    message,
-    result,
-  };
+  return {code, message, result};
 };

@@ -8,9 +8,9 @@ let menus = new Menu;
   'copy', 'paste', 'delete', 'selectall'
 ].forEach(function (name) {
   let menu = {
-        role: name,
-        label: alias[ name ]
-      };
+    role: name,
+    label: alias[ name ]
+  };
 
   if (name === 'separator') {
     menu = { type: name };
