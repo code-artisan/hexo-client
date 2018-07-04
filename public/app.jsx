@@ -189,7 +189,7 @@ class App extends React.Component {
     let node = ReactDOM.findDOMNode(this.refs.menu);
 
     $(node)
-      .on('dragstart'  , () => false)
+      .on('dragstart', () => false)
       .on('contextmenu', (event) => {
         event.preventDefault();
 
@@ -211,7 +211,9 @@ class App extends React.Component {
         );
       }
 
-      return (<li className="el-menu-msgs">没有匹配的文章</li>);
+      return (
+        <li className="el-menu-msgs">没有匹配的文章</li>
+      );
     }
 
     return resource.map(({title, draft}, index) => {

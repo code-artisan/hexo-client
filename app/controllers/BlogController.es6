@@ -118,7 +118,7 @@ module.exports = {
         return done(response('发布成功'));
       }
 
-      logger.error(`博客发布异常：--${ reason }--`);
+      logger.error(`博客发布异常：${ reason }`);
     });
   }
 };
