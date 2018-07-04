@@ -452,7 +452,7 @@ span.CodeMirror-selectedtext {
 
 @font-face {
   font-family: element-icons;
-  src: url(./node_modules/_element-theme-default@1.4.13@element-theme-default/lib/fonts/element-icons-d2f69a92faa6fe990d2e613c358be705.woff) format("woff"), url(./node_modules/_element-theme-default@1.4.13@element-theme-default/lib/fonts/element-icons-b02bdc1b846fd65473922f5f62832108.ttf) format("truetype");
+  src: url(./node_modules/element-theme-default/lib/fonts/element-icons-d2f69a92faa6fe990d2e613c358be705.woff) format("woff"), url(./node_modules/element-theme-default/lib/fonts/element-icons-b02bdc1b846fd65473922f5f62832108.ttf) format("truetype");
   font-weight: 400;
   font-style: normal; }
 

@@ -16,12 +16,12 @@ function exec(command, options = {}) {
 var checkEnvironment = function () {
   let node = shell.which('node');
 
-  if (typeof node === 'object') {
+  if (node !== null) {
     if ( typeof node.stdout === 'string' ) {
       shell.config.execPath = node.stdout;
     }
 
-    return shell.which('hexo').code === 0;
+    return shell.which('hexo').code === 0 || shell.which('git').code === 0;
   }
 
   return false
@@ -86,7 +86,7 @@ module.exports = {
   '$blog.deploy': function (done) {
     if ( ! checkEnvironment() ) {
       logger.error('博客发布失败：环境欠缺...');
-      return done(response(500, '发布失败，环境欠缺'));
+      return done(response(500, '环境欠缺，解决方法见官网'));
     }
 
     shell.cd(path.join(getPrefix()));
@@ -97,12 +97,12 @@ module.exports = {
     }
 
     const name = shell.exec('git config --get user.name')
-    if ( name.stdout.trim().length === 0 ) {
+    if ( ! name || name.stdout.trim().length === 0 ) {
       return done(response(500, '请配置你的昵称'))
     }
 
     const email = shell.exec('git config --get user.email')
-    if ( email.stdout.trim().length === 0 ) {
+    if ( ! email || email.stdout.trim().length === 0 ) {
       return done(response(500, '请配置你的邮箱'))
     }
 
