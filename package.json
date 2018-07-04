@@ -1,6 +1,6 @@
 {
-  "name": "hexo-clients",
-  "version": "1.0.0-alpha.1",
+  "name": "hexo-client",
+  "version": "2.0.2",
   "productName": "Hexo 客户端",
   "description": "Desktop app for Hexo.",
   "main": "index.js",
