@@ -33,6 +33,29 @@
   clear: both;
 }
 
+.terminal {
+  width: 790px;
+  padding: 15px;
+  border-radius: 4px;
+  background: #2d2d2d;
+  margin: 0 auto 30px auto;
+}
+
+pre {
+  margin: 0;
+  line-height: 1;
+}
+
+code {
+  color: #fff;
+  margin: 5px 0;
+  display: inline-block;
+}
+
+.comment {
+  color: #c2c2c2;
+}
+
 .text-center {
   text-align: center;
 }
@@ -74,8 +97,7 @@
 }
 
 .section img {
-  max-width: 70%;
-  margin: 0 auto;
+  margin: 0 auto 20px auto;
   display: block;
   border-radius: 4px;
 }
