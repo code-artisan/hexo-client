@@ -1,7 +1,7 @@
 {
   "name": "hexo-client",
-  "version": "2.0.1",
-  "productName": "Hexo Client",
+  "version": "2.0.2",
+  "productName": "Hexo 客户端",
   "description": "Desktop app for Hexo.",
   "main": "index.js",
   "build": {
@@ -56,8 +56,8 @@
     "moment": "^2.18.1",
     "normalize.css": "^7.0.0",
     "pangu": "^3.3.0",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
     "react-router": "^3.0.5",
     "shelljs": "^0.7.8",
     "underscore": "^1.8.3",

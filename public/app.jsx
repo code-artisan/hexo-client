@@ -90,16 +90,16 @@ class App extends React.Component {
     execute({
       $type: 'blog.deploy'
     })
-    .then(({code}) => {
+    .then(({code, message}) => {
       this.normalize();
 
       if ( code === 200 ) {
-        notify('发布文章', {
-          body: `文章发布成功`
-        });
+        notify('发布文章', { body: '文章发布成功' });
+      } else {
+        notify('发布失败', { body: message })
       }
     })
-    .catch(() => {
+    .catch((error) => {
       this.normalize();
 
       notify('发布文章', {
@@ -189,7 +189,7 @@ class App extends React.Component {
     let node = ReactDOM.findDOMNode(this.refs.menu);
 
     $(node)
-      .on('dragstart'  , () => false)
+      .on('dragstart', () => false)
       .on('contextmenu', (event) => {
         event.preventDefault();
 
@@ -211,7 +211,9 @@ class App extends React.Component {
         );
       }
 
-      return (<li className="el-menu-msgs">没有匹配的文章</li>);
+      return (
+        <li className="el-menu-msgs">没有匹配的文章</li>
+      );
     }
 
     return resource.map(({title, draft}, index) => {

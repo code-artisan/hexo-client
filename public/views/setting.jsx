@@ -45,9 +45,7 @@ class Setting extends React.Component {
       value = value * 1000 * 60;
     }
 
-    this.setState({
-      [field]: value
-    });
+    this.setState({[field]: value })
   }
 
   handleSaveSetting() {
@@ -62,27 +60,34 @@ class Setting extends React.Component {
   }
 
   render() {
+    const { prefix, url, autoSave, interval } = this.state
+
     return (
       <div className="flex-col-1 setting-container flex-items-center">
         <Form labelPosition="right" labelWidth="82">
           <Form.Item label="博客路径：">
-            <Input placeholder="请设置博客路径" size="small" value={ this.state.prefix } readOnly append={ <Button onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
+            <Input placeholder="请设置博客路径" size="small" value={ prefix } readOnly append={ <Button onClick={ this.handleChangeDir.bind(this) }>选择</Button> } />
           </Form.Item>
           <Form.Item label="博客地址：">
-            <Input placeholder="请设置博客地址" size="small" value={ this.state.url } onChange={ this.handleChangeSettings.bind(this, 'url') } />
+            <Input placeholder="请设置博客地址" size="small" value={ url } onChange={ this.handleChangeSettings.bind(this, 'url') } />
           </Form.Item>
           <Form.Item label="自动保存：">
             <Switch
               onText="开启"
               offText="关闭"
-              value={this.state.autoSave}
+              value={autoSave}
               onChange={this.handleChangeSettings.bind(this, 'autoSave')}
             />
           </Form.Item>
           {
-            this.state.autoSave ? (
+            autoSave ? (
               <Form.Item label="触发频率：">
-                <InputNumber size="small" defaultValue={ this.state.interval } onChange={ this.handleChangeSettings.bind(this, 'interval') } min="1" max="5" />
+                <InputNumber size="small"
+                  min="1"
+                  max="5"
+                  defaultValue={ typeof interval !== 'number' || isNaN(interval) ? 5 : interval }
+                  onChange={ this.handleChangeSettings.bind(this, 'interval') }
+                />
               </Form.Item>
             ) : null
           }
