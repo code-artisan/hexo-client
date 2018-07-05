@@ -11,7 +11,7 @@ $ npm start // 编译前后端资源，后端资源需重启后才生效
 
 ### 运行
 ```bash
-$ electron .
+$ npm run client
 ```
 
 ## 打包
